@@ -1,0 +1,12 @@
+getpid() -- Obtiene el identificador
+getppid() -- Obtiene el identificador padre
+chdir() -- Cambia la ruta
+getcwd() -- Obtiene la ruta
+perror() -- Información de los errores
+opendir() -- Abre un directorio
+readdir() -- Procesa las entradas
+closedir() -- Cierra los ficheros
+stat()
+fstat()
+unlink()
+rmdir()
