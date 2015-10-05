@@ -16,4 +16,7 @@ void removefile( char * file );
 // Lista un directorio
 void listdir( int argc, char * argv[] );
 
+//Elimina recursivamente directorios
+void deltree( char * dir );
+
 #endif // _FUNCIONES_H_

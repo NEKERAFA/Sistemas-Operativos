@@ -53,11 +53,7 @@ void procesarentrada(char * entrada, char * dir_act, int * salir) {
 }
 
 // Bucle principal
-<<<<<<< HEAD
-int main(int argc, char * argv[]) {
-=======
 int main(int argc, char const *argv[]) {
->>>>>>> b3b30fe092815a3c18e4bd248bebcebbf0c7d5df
     int fin = 0;
     char entrada[TAM_ENTRADA];
     char dir_act[2048];

@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <pwd.h>
 #include <grp.h>
+#include "funciones.h"
 
 // Muestra en pantalla el pid actual o el pid padre
 void pid(char * parametro) {
@@ -177,4 +178,40 @@ void listdir( int argc, char * argv[] ) {
        free(shora_actual);
        closedir(pdir);
    }
+
+//elimina recursivamente directorios
+void deltree(char * parametro){
+   char path[1000];
+   DIR * directorio;
+   struct dirent * archivo;
+   struct stat archivo_info;
+
+
+   if(parametro == NULL){
+      printf("Error: hay que pasar un parametro");
+   }else{
+      if((directorio=opendir(parametro))==NULL){
+         printf("Error: no se ha podido abrir el directorio");
+      }else{
+         while((archivo = readdir(directorio))!=NULL){
+            if(strcmp(archivo->d_name ,".")||strcmp(archivo->d_name ,"..")){
+               printf("Estoy intentando borrar el propio directorio o el directorio padre");
+            } else{
+               printf("Estoy entrando en el resto de entradas de directorio");
+               sprintf(path,"%s%s%s",parametro,path[strlen(path)-1] == '/' ? "" : "/",archivo->d_name);
+               if(stat(path,&archivo_info)== -1){
+                  printf("Imposible eliminar el directorio");
+               }else{
+                  if(archivo_info.st_mode & S_IFDIR){
+                     printf("Debe hacerse un borrado recursivo del directorio");
+                  }else{
+                     printf("Debe borrar un archivo");
+                  }
+               }
+
+            }
+         }
+      }
+   }
+}
 }
