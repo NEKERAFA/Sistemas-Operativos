@@ -178,7 +178,7 @@ void listdir( int argc, char * argv[] ) {
        free(shora_actual);
        closedir(pdir);
    }
-
+}
 //elimina recursivamente directorios
 void deltree(char * parametro){
    char path[1000];
@@ -195,23 +195,26 @@ void deltree(char * parametro){
       }else{
          while((archivo = readdir(directorio))!=NULL){
             if(strcmp(archivo->d_name ,".")||strcmp(archivo->d_name ,"..")){
-               printf("Estoy intentando borrar el propio directorio o el directorio padre");
+               continue;
             } else{
-               printf("Estoy entrando en el resto de entradas de directorio");
+               printf("Estoy entrando en el resto de entradas de directorio\n");
                sprintf(path,"%s%s%s",parametro,path[strlen(path)-1] == '/' ? "" : "/",archivo->d_name);
                if(stat(path,&archivo_info)== -1){
                   printf("Imposible eliminar el directorio");
                }else{
                   if(archivo_info.st_mode & S_IFDIR){
-                     printf("Debe hacerse un borrado recursivo del directorio");
+                     printf("Debe hacerse un borrado recursivo del directorio\n");
+                     deltree(path);
                   }else{
-                     printf("Debe borrar un archivo");
+                     printf("Debe borrar un archivo\n");
+                     removefile(path);
                   }
                }
 
             }
          }
+         removefile(parametro);
       }
    }
 }
-}
+

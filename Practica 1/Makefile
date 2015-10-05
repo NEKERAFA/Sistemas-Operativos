@@ -33,3 +33,12 @@ gdb:
 clean:
 	echo -e '\e[32mLimpiando...\e[0m'
 	rm -f *.o shell list deltree
+
+prueba:
+	mkdir /home/skynet/Desktop/a/
+	mkdir /home/skynet/Desktop/a/b/
+	mkdir /home/skynet/Desktop/a/b/c/
+	mkdir /home/skynet/Desktop/a/b/c/d/
+
+	touch /home/skynet/Desktop/a/b/t.txt
+	touch /home/skynet/Desktop/a/b/skynet.txt
