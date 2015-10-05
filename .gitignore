@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Object files
 *.o
 *.ko
@@ -35,3 +36,10 @@
 *.pdf
 *.doc
 *.txt
+=======
+*.o
+*.out
+*.txt
+*.pdf
+
+>>>>>>> b3b30fe092815a3c18e4bd248bebcebbf0c7d5df
