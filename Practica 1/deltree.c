@@ -2,7 +2,7 @@
 #include "funciones.h"
 
 int main (int argc, char * argv[]){
-	char * dir = "/home/";
+	char * dir = "/home/skynet/Desktop/a/";
 	
 	deltree( dir );
 }

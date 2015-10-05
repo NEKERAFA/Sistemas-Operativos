@@ -186,7 +186,6 @@ void deltree(char * parametro){
    struct dirent * archivo;
    struct stat archivo_info;
 
-
    if(parametro == NULL){
       printf("Error: hay que pasar un parametro");
    }else{
@@ -194,9 +193,11 @@ void deltree(char * parametro){
          printf("Error: no se ha podido abrir el directorio");
       }else{
          while((archivo = readdir(directorio))!=NULL){
-            if(strcmp(archivo->d_name ,".")||strcmp(archivo->d_name ,"..")){
+            
+            if(!strcmp(archivo->d_name ,".")||!strcmp(archivo->d_name ,"..")){
                continue;
             } else{
+               printf("WOLOLO\n");
                printf("Estoy entrando en el resto de entradas de directorio\n");
                sprintf(path,"%s%s%s",parametro,path[strlen(path)-1] == '/' ? "" : "/",archivo->d_name);
                if(stat(path,&archivo_info)== -1){
