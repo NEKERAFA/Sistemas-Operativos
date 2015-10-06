@@ -20,6 +20,9 @@ void pid(char * parametro) {
 // Muestra los autores
 void author() {
    printf("Autores: \n");
+   printf("Rafael Alcalde Azpiazu \n");
+   printf("Ivan Anta Porto \n");
+
 }
 
 // Muestra el directorio actual
@@ -185,7 +188,7 @@ void deltree(char * parametro){
    DIR * directorio;
    struct dirent * archivo;
    struct stat archivo_info;
-
+   path[0]='\0';
    if(parametro == NULL){
       printf("Error: hay que pasar un parametro");
    }else{
@@ -197,24 +200,20 @@ void deltree(char * parametro){
             if(!strcmp(archivo->d_name ,".")||!strcmp(archivo->d_name ,"..")){
                continue;
             } else{
-               printf("WOLOLO\n");
-               printf("Estoy entrando en el resto de entradas de directorio\n");
                sprintf(path,"%s%s%s",parametro,path[strlen(path)-1] == '/' ? "" : "/",archivo->d_name);
                if(stat(path,&archivo_info)== -1){
-                  printf("Imposible eliminar el directorio");
+                  printf("Imposible eliminar el directorio\n");
                }else{
                   if(archivo_info.st_mode & S_IFDIR){
-                     printf("Debe hacerse un borrado recursivo del directorio\n");
                      deltree(path);
                   }else{
-                     printf("Debe borrar un archivo\n");
                      removefile(path);
                   }
                }
-
             }
          }
          removefile(parametro);
+         closedir(directorio);
       }
    }
 }
