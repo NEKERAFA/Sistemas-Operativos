@@ -19,9 +19,9 @@ void pid(char * parametro) {
 
 // Muestra los autores
 void author() {
-   printf("Autores: \n");
-   printf("Rafael Alcalde Azpiazu \n");
-   printf("Ivan Anta Porto \n");
+   printf("Este shell ha sido realizado por: \n");
+   printf("Rafael Alcalde Azpiazu (rafael.alcalde.azpizu@udc.es) \n");
+   printf("Ivan Anta Porto  (i.anta@udc.es)\n");
 
 }
 

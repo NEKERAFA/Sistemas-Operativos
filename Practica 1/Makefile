@@ -32,7 +32,7 @@ gdb:
 
 clean:
 	echo -e '\e[32mLimpiando...\e[0m'
-	rm -f *.o shell list deltree
+	rm -f *.o $(OBJ_SHELL) $(OBJ_LISTA) $(OBJ_DELTR)
 
 prueba:
 	mkdir /home/skynet/Desktop/a/
