@@ -34,11 +34,14 @@ clean:
 	echo -e '\e[32mLimpiando...\e[0m'
 	rm -f *.o $(OBJ_SHELL) $(OBJ_LISTA) $(OBJ_DELTR)
 
-prueba:
+prueba_deltree:
+	echo -e '\e[32mPrueba de la funcion deltree\e[0m'
 	mkdir ~/Desktop/a/
 	mkdir ~/Desktop/a/b/
 	mkdir ~/Desktop/a/b/c/
 	mkdir ~/Desktop/a/b/c/d/
 
 	touch ~/Desktop/a/b/t.txt
-	touch ~/Desktop/a/b/skynet.txt
+	touch ~/Desktop/a/b/prueba.txt
+
+	./deltree.out ~/Desktop/a/
