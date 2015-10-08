@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <pwd.h>
 #include <grp.h>
+#include <fcntl.h>
 #include "funciones.h"
 
 // Muestra en pantalla el pid actual o el pid padre
@@ -160,9 +161,24 @@ void print_fileinfo(struct stat file_info) {
    free(hora_fichero);
 }
 
+// Imprime la dirección del link
+void printslnk(char * path) {
+   char * buf_slink = (char *) malloc(1024*sizeof(char));
+
+   if(readlink(path, buf_slink, sizeof(buf_slink)) == -1) {
+      printf("\n");
+      perror("Fallo al seguir link simbólico");
+   } else {
+      printf(" -> %s\n", buf_slink);
+   }
+
+   free(buf_slink);
+}
+
 // Lista un directorio
 void listdir( int argc, char * argv[] ) {
    int flags;
+   int df;
    char * dir_path = ".";
    DIR * pdir;
    struct dirent * sdir;
@@ -177,14 +193,19 @@ void listdir( int argc, char * argv[] ) {
 
          while((sdir = readdir(pdir)) != NULL) {
             sprintf(file_path, "%s/%s", dir_path, sdir->d_name);
-            if (stat(file_path, &file_info) == -1) {
+            if (lstat(file_path, &file_info) == -1) {
                perror("STAT: No se puede mostrar el archivo");
             } else {
                if (((sdir->d_name[0] != '.') && !(flags & HIDDEN_FILES)) || (flags & HIDDEN_FILES)) {
                   if (!(flags & SHORT_NAME)) { print_fileinfo(file_info); }
-                  printf("%s\n", sdir->d_name);
+                  if(!(flags & SHORT_NAME) && (filetype(file_info.st_mode) == 'l')) {
+                     printf("%s", sdir->d_name);
+                     printslnk(file_path);
+                  } else {
+                     printf("%s\n", sdir->d_name);
+                  }
                }
-            } // endif
+            }
           } // endwhile
 
           closedir(pdir);

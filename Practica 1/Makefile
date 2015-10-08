@@ -35,10 +35,10 @@ clean:
 	rm -f *.o $(OBJ_SHELL) $(OBJ_LISTA) $(OBJ_DELTR)
 
 prueba:
-	mkdir /home/skynet/Desktop/a/
-	mkdir /home/skynet/Desktop/a/b/
-	mkdir /home/skynet/Desktop/a/b/c/
-	mkdir /home/skynet/Desktop/a/b/c/d/
+	mkdir ~/Desktop/a/
+	mkdir ~/Desktop/a/b/
+	mkdir ~/Desktop/a/b/c/
+	mkdir ~/Desktop/a/b/c/d/
 
-	touch /home/skynet/Desktop/a/b/t.txt
-	touch /home/skynet/Desktop/a/b/skynet.txt
+	touch ~/Desktop/a/b/t.txt
+	touch ~/Desktop/a/b/skynet.txt
