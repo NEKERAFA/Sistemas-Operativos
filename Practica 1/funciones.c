@@ -168,12 +168,12 @@ void printslnk(char * path) {
    char * path_link = (char *) malloc(1024*sizeof(char));
 
    // Obtiene la ruta real del archivo
-   if(realpath(path, buf_slink) == NULL) {
+   if(realpath(path, path_link) == NULL) {
       printf("\n");
       perror("Fallo al seguir link simbólico");
-   } else { printf(" -> %s\n", buf_slink); }
+   } else { printf(" -> %s\n", path_link); }
 
-   free(buf_slink);
+   free(path_link);
 }
 
 // Lista un directorio
