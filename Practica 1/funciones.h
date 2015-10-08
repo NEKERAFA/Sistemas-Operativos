@@ -1,7 +1,8 @@
 #ifndef _FUNCIONES_H_
 #define _FUNCIONES_H_
 
-enum {HIDDEN_FILES = 1 << 0, SHORT_NAME = 1 << 1};
+// Flags de los parámetros
+const enum {HIDDEN_FILES = 1 << 0, SHORT_NAME = 1 << 1};
 
 // Muestra en pantalla el pid actual o el pid padre
 void pid( char * parametro );
