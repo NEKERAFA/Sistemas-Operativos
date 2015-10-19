@@ -8,66 +8,8 @@
 #include <unistd.h>
 #include <pwd.h>
 #include <grp.h>
-#include <fcntl.h>
+#include <limits.h>
 #include "funciones.h"
-
-// Muestra en pantalla el pid actual o el pid padre
-void pid(char * parametro) {
-   if (parametro == NULL) { printf("Pid actual: %d\n", getpid()); }
-   else if (!strcmp(parametro, "-p")) { printf("Pid padre: %d\n", getppid()); }
-   else { printf("Uso: pid [opciones]: Muestra el pid del proceso que ejecuta el shell.\n\nOpciones:\n  -p Muestra el pid del proceso padre del shell\n  -h Ayuda\n"); }
-}
-
-// Muestra los autores
-void author() {
-   printf("Este shell ha sido realizado por: \n");
-   printf("Rafael Alcalde Azpiazu (rafael.alcalde.azpizu@udc.es) \n");
-   printf("Ivan Anta Porto  (i.anta@udc.es)\n");
-
-}
-
-// Muestra el directorio actual
-void getdir( char * cur_dir ) {
-   if (getcwd(cur_dir, 2048) == NULL) {
-      perror("Imposible obtener el directorio actual");
-   } else {
-      printf("Actualmente en: %s\n", cur_dir);
-   }
-}
-
-// Cambia de directorio
-void changedir( char * dir, char * cur_dir ) {
-   int change;
-
-   if (dir == NULL) {
-      getdir(cur_dir);
-   } else {
-      change = chdir(dir);
-      if (change == -1) {
-         perror("Imposible cambiar el directorio");
-      } else {
-         getdir(cur_dir);
-      }
-   }
-}
-
-// Elimina un archivo
-void removefile( char * file ) {
-   struct stat file_info;
-   if (file != NULL) {
-      if (stat(file, &file_info) == -1) { perror("Imposible eliminar el fichero");
-      } else {
-         if(file_info.st_mode & S_IFDIR) {
-            if(rmdir(file) == -1) { perror("Imposible eliminar el directorio");
-            } else { printf("Directorio %s eliminado\n", file); }
-         } else {
-            if(unlink(file) == -1) { perror("Imposible eliminar el archivo");
-            } else { printf("Archivo %s eliminado\n", file); }
-         }
-      }
-   } else { printf("Uso: delete [archivo]: Elimina archivo. archivo es un fichero o un directorio vacio.\n");
-   }
-}
 
 // Obtiene el tipo de fichero
 char filetype(mode_t f_mode) {
@@ -103,22 +45,82 @@ char * modoarchivo(mode_t f_mode) {
    return permisos;
 }
 
-// Obtiene los argumentos
+// Muestra en pantalla el pid actual o el pid padre
+void pid(char * parametro) {
+   if (parametro == NULL) { printf("Pid actual: %d\n", getpid()); }
+   else if (!strcmp(parametro, "-p")) { printf("Pid padre: %d\n", getppid()); }
+   else { printf("Uso: pid [opciones]: Muestra el pid del proceso que ejecuta el shell.\n\nOpciones:\n  -p Muestra el pid del proceso padre del shell\n  -h Ayuda\n"); }
+}
+
+// Muestra los autores
+void author() {
+   printf("Este shell ha sido realizado por: \n");
+   printf("Rafael Alcalde Azpiazu (rafael.alcalde.azpizu@udc.es) \n");
+   printf("Ivan Anta Porto  (i.anta@udc.es)\n");
+
+}
+
+// Muestra el directorio actual
+void getdir( char * cur_dir ) {
+   if (getcwd(cur_dir, 2048) == NULL) {
+      perror("Imposible obtener el directorio actual");
+   } else {
+      printf("Actualmente en: %s\n", cur_dir);
+   }
+}
+
+// Cambia de directorio de trabajo
+void changedir( char * dir, char * cur_dir ) {
+   int change;
+
+   if (dir == NULL) { getdir(cur_dir);
+   } else {
+      change = chdir(dir);
+      if (change == -1) { perror("Imposible cambiar el directorio");
+      } else { getdir(cur_dir); }
+   }
+}
+
+// Elimina un archivo
+void removefile( char * file ) {
+   struct stat file_info;
+   if (file != NULL) {
+      if (stat(file, &file_info) == -1) { perror("Imposible eliminar el fichero");
+      } else {
+         // Comprueba que sea un directorio y lo elimina
+         if(filetype(file_info.st_mode) == 'd') {
+            if(rmdir(file) == -1) { perror("Imposible eliminar el directorio");
+            } else { printf("Directorio %s eliminado\n", file); }
+         // Si no elimina el archivo
+         } else {
+            if(unlink(file) == -1) { perror("Imposible eliminar el archivo");
+            } else { printf("Archivo %s eliminado\n", file); }
+         }
+      }
+   } else { printf("Uso: delete [archivo]: Elimina archivo. archivo es un fichero o un directorio vacio.\n"); }
+}
+
+// Obtiene los argumentos para listar
 int getarg(int argc, char * argv[], char * *path) {
    int flags = 0;
    int i;
 
-   if (argc > 3) { printf("La función necesita 3 argumentos");
+   if (argc > 3) { printf("Uso: lista [opciones] [ruta]: Lista el directorio actual.\n\nOpciones:\n  -a Muestra los achivos ocultos\n  -s Muestra el nombre completo\n");
    } else {
+      // Bucle for que recorre los argumentos
       for (i = 0; i < argc ; ++i) {
          if(argv[i][0] == '-') {
+            // Si el string es una a, entonces guarda en la flag que se vean los archivos ocultos
             if(!strcmp(argv[i]+1, "a")) { flags |= HIDDEN_FILES; }
+            // Si el string es una a, entonces guarda en la flag que se vean los archivos con nombre corto
             else if(!strcmp(argv[i]+1, "s")) { flags |= SHORT_NAME; }
+            // Si no deja de seguir buscando
             else {
                printf("Uso: lista [opciones] [ruta]: Lista el directorio actual.\n\nOpciones:\n  -a Muestra los achivos ocultos\n  -s Muestra el nombre completo\n");
                flags = -1;
                break;
             }
+         // Guarda el directorio
          } else { *path = argv[i]; }
       }
 
@@ -161,18 +163,17 @@ void print_fileinfo(struct stat file_info) {
    free(hora_fichero);
 }
 
-// Imprime la dirección del link
+// Imprime la dirección real del link
 void printslnk(char * path) {
-   char * buf_slink = (char *) malloc(1024*sizeof(char));
+   char * path_link = (char *) malloc(1024*sizeof(char));
 
-   if(readlink(path, buf_slink, sizeof(buf_slink)) == -1) {
+   // Obtiene la ruta real del archivo
+   if(realpath(path, path_link) == NULL) {
       printf("\n");
       perror("Fallo al seguir link simbólico");
-   } else {
-      printf(" -> %s\n", buf_slink);
-   }
+   } else { printf(" -> %s\n", path_link); }
 
-   free(buf_slink);
+   free(path_link);
 }
 
 // Lista un directorio
@@ -180,30 +181,34 @@ void listdir( int argc, char * argv[] ) {
    int flags;
    int df;
    char * dir_path = ".";
-   DIR * pdir;
    struct dirent * sdir;
+   DIR * pdir;
    int i;
 
+   // Obtiene los argumentos
    if ((flags = getarg(argc, argv, &dir_path)) != -1) {
+      // Abre el directorio
       if ((pdir = opendir(dir_path)) == NULL) {
          perror("Imposible listar el directorio");
       } else {
          char file_path[2048];
          struct stat file_info;
 
+         // Recorre el directorio
          while((sdir = readdir(pdir)) != NULL) {
             sprintf(file_path, "%s/%s", dir_path, sdir->d_name);
             if (lstat(file_path, &file_info) == -1) {
                perror("STAT: No se puede mostrar el archivo");
             } else {
+               // Compruebo si la flag está desactivada para archivos ocultos
                if (((sdir->d_name[0] != '.') && !(flags & HIDDEN_FILES)) || (flags & HIDDEN_FILES)) {
+                  // Si no está la flag de nombre corto, imprimo información completa de la entrada
                   if (!(flags & SHORT_NAME)) { print_fileinfo(file_info); }
+                  // Si es un soft link, muestro a donde apunta
                   if(!(flags & SHORT_NAME) && (filetype(file_info.st_mode) == 'l')) {
                      printf("%s", sdir->d_name);
                      printslnk(file_path);
-                  } else {
-                     printf("%s\n", sdir->d_name);
-                  }
+                  } else { printf("%s\n", sdir->d_name); }
                }
             }
           } // endwhile

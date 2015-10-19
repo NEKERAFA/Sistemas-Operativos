@@ -11,6 +11,7 @@ void prompt(char * actual_dir) {
     printf("%s$ ", actual_dir);
 }
 
+// Lee la entrada
 void leerentrada(char * entrada, int tamano_entrada) {
     char * retorno_entrada;
     retorno_entrada = fgets(entrada, tamano_entrada, stdin);
@@ -33,6 +34,7 @@ void procesarentrada(char * entrada, char * dir_act, int * salir) {
     int n_parametros;
     n_parametros = dividircadena(entrada, c_parametros);
 
+    // Lista de funciones
     if (n_parametros > 0) {
         if((!strcmp(c_parametros[0], "exit")) || (!strcmp(c_parametros[0], "quit")) || (!strcmp(c_parametros[0], "fin"))) {
             *salir = 1;
@@ -54,7 +56,7 @@ void procesarentrada(char * entrada, char * dir_act, int * salir) {
     }
 }
 
-// Bucle principal
+// Función principañ
 int main(int argc, char const *argv[]) {
     int fin = 0;
     char entrada[TAM_ENTRADA];
@@ -63,6 +65,7 @@ int main(int argc, char const *argv[]) {
         perror("Imposible obtener el directorio actual");
     }
 
+    // Bucle principal
     printf("Interprete de comando en UNIX\n");
     while(!fin) {
         prompt(dir_act);
