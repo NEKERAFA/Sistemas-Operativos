@@ -21,4 +21,7 @@ void listdir( int argc, char * argv[] );
 //Elimina recursivamente directorios
 void deltree( char * dir );
 
+// Crea un hijo y espera a que el hijo termine
+void dofork();
+
 #endif // _FUNCIONES_H_
