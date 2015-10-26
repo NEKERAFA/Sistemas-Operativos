@@ -4,6 +4,7 @@
 #include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/resource.h>
 #include <dirent.h>
 #include <unistd.h>
 #include <pwd.h>
@@ -22,7 +23,7 @@ void pid(char * parametro) {
 void author() {
    printf("Este shell ha sido realizado por: \n");
    printf("Rafael Alcalde Azpiazu (rafael.alcalde.azpizu@udc.es) \n");
-   printf("Ivan Anta Porto  (i.anta@udc.es)\n");
+   printf("Ivan Anta Porto (i.anta@udc.es)\n");
 
 }
 
@@ -73,12 +74,12 @@ void removefile( char * file ) {
 char filetype(mode_t f_mode) {
    switch (f_mode & S_IFMT) {
       case S_IFSOCK:  return 's';
-      case S_IFLNK:   return 'l';
-      case S_IFREG:   return '-';
-      case S_IFBLK:   return 'b';
-      case S_IFDIR:   return 'd';
-      case S_IFCHR:   return 'c';
-      case S_IFIFO:   return 'p';
+      case S_IFLNK:	return 'l';
+      case S_IFREG:	return '-';
+      case S_IFBLK:	return 'b';
+      case S_IFDIR:	return 'd';
+      case S_IFCHR:	return 'c';
+      case S_IFIFO:	return 'p';
       default:		return '?';
    }
 }
@@ -212,6 +213,7 @@ void listdir( int argc, char * argv[] ) {
       }
    }
 }
+
 //elimina recursivamente directorios
 void deltree(char * parametro){
    char path[1000];
@@ -244,6 +246,89 @@ void deltree(char * parametro){
          }
          removefile(parametro);//Finalmente borramos el directorio actual
          closedir(directorio);//Y cerramos el directorio
+      }
+   }
+}
+
+// Obtiene la prioridad
+void getprioridad(char * parametro) {
+   int prioridad;
+   if (parametro == NULL) {
+      if((prioridad = getpriority(PRIO_PROCESS, 0)) == -1)
+         perror("Error al obtener la prioridad");
+      else printf("Esta shell actual tiene prioridad %d\n", prioridad);
+   } else {
+      if((prioridad = getpriority(PRIO_PROCESS, atoi(parametro))) == -1)
+         perror("Error al obtener la prioridad");
+      else printf("El proceso %s tiene prioridad %i\n", parametro, prioridad);
+   }
+}
+
+// Establece la prioridad
+void setprioridad(int argc, char * argv[]) {
+   int prioridad;
+   if (argc < 2) getprioridad(argv[0]);
+   else if (argc == 2) {
+      if(setpriority(PRIO_PROCESS, atoi(argv[0]), atoi(argv[1])) == -1)
+         perror("Error al mostrar la prioridad");
+      else printf("Prioridad de %s cambiada a %s\n", argv[0], argv[1]);
+   } else {
+      printf("Uso: setpriority [pid] [valor]: Establece una prioridad.\n");
+   }
+}
+
+// Crea un hijo y espera a que el hijo termine
+void dofork() {
+   int pid;
+   if((pid = fork()) != 0) waitpid(pid, NULL, 0);
+}
+
+// Ejecuta un programa sin crear un proceso nuevo
+void execprog(char * argv[]) {
+   if(argv[0] == NULL) printf("exec: Se necesita un argumento mínimo\n");
+   else if(execvp(argv[0], argv) == -1) perror("Error al ejecutar");
+   exit(0);
+}
+
+// Ejecuta un programa sin crear un proceso nuevo
+void execprogpri(int argc, char * argv[]) {
+   if(argc < 2)
+      printf("Uso: execpri [prioridad] [programa]: Ejecuta un programa con una prioridad\n");
+   else {
+      if (setpriority(PRIO_PROCESS, 0, atoi(argv[0])) == -1)
+         perror("Error al establecer la prioridad");
+      else if(execvp(argv[1], argv+1) == -1) perror("Error al ejecutar");
+      exit(0);
+   }
+}
+
+// Crea un proceso en primer plano
+void primerplano(char * argv[]) {
+   int pid;
+
+   if(argv[0] == NULL) printf("pplano: Se necesita un argumento mínimo\n");
+   if((pid = fork()) == 0) {
+      if(execvp(argv[0], argv) == -1) perror("Error al ejecutar");
+      exit(0);
+   } else {
+      waitpid(pid, NULL, 0);
+   }
+}
+
+// Crea un proceso en primer plano
+void primerplanopri(int argc, char * argv[]) {
+   int pid;
+
+   if(argc < 2)
+      printf("Uso: pplanopri [prioridad] [programa]: Ejecuta un programa en primer plano una prioridad\n");
+   else {
+      if((pid = fork()) == 0) {
+         if (setpriority(PRIO_PROCESS, 0, atoi(argv[0])) == -1)
+            perror("Error al establecer la prioridad");
+         else if(execvp(argv[1], argv) == -1) perror("Error al ejecutar");
+         exit(0);
+      } else {
+         waitpid(pid, NULL, 0);
       }
    }
 }
