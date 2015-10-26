@@ -3,84 +3,95 @@
 
 #include "lista.h"
 
-	
-	void listaVacia(lista *l){
-		*l = malloc(sizeof(lista));
-		if (l==NULL){
-			printf("Error: no queda memoria");
-		}else{
-			(*l)->prim = NULL;
-			(*l)->ultim = NULL;
+	static nodo *crearnodo(){
+		
+		nodo *tmp = malloc (sizeof(nodo));
+		if (tmp == NULL){
+			printf("Memoria agotada\n");
+			exit(EXIT_FAILURE);
 		}
+
+		return tmp;
+	}
+
+	lista crearlista(){
+
+		nodo *l = crearnodo();
+		l->sig = l;
+		l->ant = l;
+
+		return l;
 	}
 
 	int esListaVacia(lista l){
-		return (l->prim == NULL);
+
+		return ((l->sig ==l)&&(l->ant = l));
 	}
 
-	posicion Primera (lista l){
-		printf("Primera: Función no implementada todavía, por favor, sea paciente\n");
-		//return l->prim;
+	posicion primera (lista l){
+		return (l->sig);
 	}
 
-	posicion Ultima (lista l){
-		/*
-		return l->ultim;
-	*/printf("Ultima: Función no implementada todavía, por favor, sea paciente\n");
+	posicion ultima (lista l){
+		return (l->ant);
 	}
 
-	posicion Anterior (posicion p){
-		/*
-		return p->ant;
-	*/printf("Anterior: Función no implementada todavía, por favor, sea paciente\n");
+	posicion anterior (posicion p, lista l){
+
+		if((p == l)||(p->ant == l)){
+			return NULL;
+		} else {
+			return p->ant;
+		}
 	}
 
-	posicion Siguiente (posicion p){
-		/*
-		return p->sig;
-	*/printf("Siguiente: Función no implementada todavía, por favor, sea paciente\n");
+	posicion siguiente (posicion p,lista l){
+
+		if (p->sig == l){
+			return NULL;
+		} else {
+			return p->sig;
+		}
 	}
 
-	dato* getDato (posicion p){
-		/*
+	int esfindelista(posicion p, lista l){
+		return (p->sig == l);
+	}
+
+	dato* getDato (posicion p,lista l){
 		return p->dato;
-	*/printf("GetDatos: Función no implementada todavía, por favor, sea paciente\n");
 	}
 
 	int insertar (dato *d, lista l){
-/*		posicion p,aux;
+		nodo *tmp = crearnodo();
+		posicion p = ultima(l);
+		
+		tmp->dato = d;
+		tmp->ant= p;
+		tmp->sig=l;
+		
+		l->ant = tmp;
+		p->sig = tmp;
 
-		p = malloc(sizeof(nodo));
-		if (p==NULL){
-			printf("No se puede insertar, no queda memoria");
-		} else {
-			if(l->prim ==NULL){
-				p->dato = d;
-				p->sig = NULL;
-				p->ant = NULL;
-				l->prim = p;
-				l->ultim = p;	
-			} else{
-				aux = Ultima(l);
-				p->dato = d;
-				p->sig = NULL;
-				p->ant = aux;
+	}
 
-				aux->sig = p;
-				l->ultim = p;
-			}
+	int eliminar (posicion p, lista l){
+		posicion tmp = p;
+		tmp->ant->sig =tmp->sig;
+		tmp->sig->ant =tmp->ant;
+		free(tmp);
+	}
+
+	int actualizarDato (dato *d,posicion p,lista l){
+		dato *tmp = p->dato;
+		p->dato = d;
+		free(tmp);
+	}
+
+	void eliminarLista(lista *l){
+		while(!esListaVacia(*l)){
+			eliminar(primera(*l),*l);
 		}
-	*/printf("Insertar: Función no implementada todavía, por favor, sea paciente\n");
-	}
-
-	int eliminar (posicion p){
-		printf("Eliminar: Función no implementada todavía, por favor, sea paciente\n");
-	}
-	
-	int actualizarDato (dato d,posicion p){
-		printf("Actualizar: Función no implementada todavía, por favor, sea paciente\n");
-	}
-
-	void eliminarLista(lista l){
-		printf("EliminarLista: Función no implementada todavía, por favor, sea paciente\n");	
+		free(*l);
+		*l=NULL;
 	}

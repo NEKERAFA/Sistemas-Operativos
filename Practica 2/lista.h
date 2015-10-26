@@ -10,25 +10,20 @@
 	};
 
 	typedef struct nodo nodo;
-	
-	struct list{
-		nodo *prim;
-		nodo *ultim;
-	};
-
 	typedef nodo *posicion;
-	typedef struct list *lista;
+	typedef nodo *lista;
 
 	//Cabeceras de funciones
-	void listaVacia(lista *l);
+	lista crearlista();
 	int esListaVacia(lista l);
-	posicion Primera (lista l);
-	posicion Ultima (lista l);
-	posicion Anterior (posicion p);
-	posicion Siguiente (posicion p);
-	dato* getDato (posicion p);
+	posicion primera (lista l);
+	posicion ultima (lista l);
+	posicion anterior (posicion p, lista l);
+	posicion siguiente (posicion p,lista l);
+	int esfindelista(posicion p, lista l);
+	dato* getDato (posicion p,lista l);
 	int insertar (dato *d, lista l);
-	int eliminar (posicion p);
-	int actualizarDato (dato d,posicion p);
-	void eliminarLista(lista l);
+	int eliminar (posicion p, lista l);
+	int actualizarDato (dato *d,posicion p,lista l);
+	void eliminarLista(lista *l);
 #endif
