@@ -48,8 +48,6 @@ void procesarentrada(char * entrada, char * dir_act, int * salir) {
             listdir(n_parametros-1, c_parametros+1);
         } else if (!strcmp(c_parametros[0], "delete")) {
             removefile(c_parametros[1]);
-        }else if (!strcmp(c_parametros[0], "deltree")){
-            deltree(c_parametros[1]);
         } else {
             printf("%s: Orden no encontrada\n", c_parametros[0]);
         }

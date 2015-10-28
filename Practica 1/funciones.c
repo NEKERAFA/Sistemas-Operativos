@@ -54,9 +54,9 @@ void pid(char * parametro) {
 
 // Muestra los autores
 void author() {
-   printf("Este shell ha sido realizado por: \n");
-   printf("Rafael Alcalde Azpiazu (rafael.alcalde.azpizu@udc.es) \n");
-   printf("Ivan Anta Porto  (i.anta@udc.es)\n");
+   printf("Autores: \n");
+   printf("Rafael Alcalde Azpiazu \n");
+   printf("Ivan Anta Porto \n");
 
 }
 
@@ -224,31 +224,31 @@ void deltree(char * parametro){
    struct dirent * archivo;
    struct stat archivo_info;
    path[0]='\0';
-
-   if(parametro == NULL){//Si no se le pasa ninguna ruta a la funcion
+   if(parametro == NULL){
       printf("Error: hay que pasar un parametro");
    }else{
-      if((directorio=opendir(parametro))==NULL){//Si no se puede abrir el directorio
-         perror("Error: no se ha podido abrir el directorio: ");
+      if((directorio=opendir(parametro))==NULL){
+         printf("Error: no se ha podido abrir el directorio");
       }else{
-         while((archivo = readdir(directorio))!=NULL){//Se leen todas las entradas de directorio
-            if(!strcmp(archivo->d_name ,".")||!strcmp(archivo->d_name ,"..")){//Se excluyen del procesado los directorios . y ..
+         while((archivo = readdir(directorio))!=NULL){
+
+            if(!strcmp(archivo->d_name ,".")||!strcmp(archivo->d_name ,"..")){
                continue;
             } else{
                sprintf(path,"%s%s%s",parametro,path[strlen(path)-1] == '/' ? "" : "/",archivo->d_name);
-               if(stat(path,&archivo_info)== -1){//se comprueba si hay acceso a la entrada de directorio
+               if(stat(path,&archivo_info)== -1){
                   printf("Imposible eliminar el directorio\n");
                }else{
-                  if(archivo_info.st_mode & S_IFDIR){//Si la entrada es un directorio se llama de nuevo a esta función
+                  if(archivo_info.st_mode & S_IFDIR){
                      deltree(path);
-                  }else{//Si no es un directorio se elimina el archivo
+                  }else{
                      removefile(path);
                   }
                }
             }
          }
-         removefile(parametro);//Finalmente borramos el directorio actual
-         closedir(directorio);//Y cerramos el directorio
+         removefile(parametro);
+         closedir(directorio);
       }
    }
 }
