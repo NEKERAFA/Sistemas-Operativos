@@ -37,6 +37,6 @@ void execprog(char * argv[]);
 void execprogpri(int argc, char * argv[]);
 
 // Crea un proceso en primer plano
-void primerplanopri(int argc, char * argv[])
+void primerplanopri(int argc, char * argv[]);
 
 #endif // _FUNCIONES_H_
