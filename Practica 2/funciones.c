@@ -332,3 +332,19 @@ void primerplanopri(int argc, char * argv[]) {
       }
    }
 }
+
+void segundoplano(){
+   printf("Función no implementada todavía\n");
+}
+
+void segundoplanopri(){
+   printf("Función no implementada todavía\n");
+}
+
+void jobs(){
+   printf("Función no implementada todavía\n");
+}
+
+void clearjobs(){
+   printf("Función no implementada todavía\n");
+}

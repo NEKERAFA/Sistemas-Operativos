@@ -1,7 +1,15 @@
 #ifndef _LISTA_
 #define _LISTA_
 	//Declaración de tipos
-	typedef int dato;
+	struct dato {
+		int pid;
+		int prio;
+		int status;
+		time_t hora_ini;
+		char * comando;
+	};
+
+	typedef struct dato dato;
 	
 	struct nodo {
 		dato *dato;
@@ -26,4 +34,6 @@
 	int eliminar (posicion p, lista l);
 	int actualizarDato (dato *d,posicion p,lista l);
 	void eliminarLista(lista *l);
+	dato* creardato(int pid, int prio, int status, time_t hora_ini, char * comando);
+	int eliminardato(dato *d);
 #endif

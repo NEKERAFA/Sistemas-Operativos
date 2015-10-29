@@ -14,6 +14,17 @@
 		return tmp;
 	}
 
+	static dato *creardato(){
+		dato *tmp = malloc (sizeof(dato));
+
+		if (tmp == NULL){
+			printf("Memoria agotada \n");
+			exit(EXIT_FAILURE);
+		}
+
+		return tmp;
+	}
+
 	lista crearlista(){
 
 		nodo *l = crearnodo();
@@ -79,6 +90,7 @@
 		posicion tmp = p;
 		tmp->ant->sig =tmp->sig;
 		tmp->sig->ant =tmp->ant;
+		eliminardato($(l->dato));
 		free(tmp);
 	}
 
@@ -94,4 +106,21 @@
 		}
 		free(*l);
 		*l=NULL;
+	}
+	
+	dato* creardato(int pid, int prio, int status, time_t hora_ini, char * comando){
+		dato d = creardato();
+
+		d->pid = pid;
+		d->prio = prio;
+		d->status = status;
+		d->hora_ini = hora_ini;
+		d->comando = comando;
+
+		return d;
+	}
+
+	int eliminardato(dato *d){
+		free (d->comando);
+		free (d);
 	}

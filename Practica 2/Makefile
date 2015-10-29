@@ -26,7 +26,7 @@ deltree: funciones
 
 lista: 
 	echo -e '\e[32mCompilando modulo lista\e[0m'
-	$(CC) $(CFLAGS) -c lista.c
+	$(CC) $(CFLAGS) -c lista.c -o lista.o
 
 gdb:
 	echo -e '\e[32mCompilando en modo debug...\e[0m'
@@ -48,4 +48,3 @@ prueba_deltree:
 	touch ~/Desktop/a/b/t.txt
 	touch ~/Desktop/a/b/prueba.txt
 
-	./deltree.out ~/Desktop/a/

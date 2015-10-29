@@ -13,6 +13,8 @@ void testListaVacia(){
 	} else {
 		printf("***********************FAIL***********************\n\n");
 	}
+
+	free (l);
 }
 
 //Debe dar true si la lista está vacía y false si no lo está	
@@ -20,7 +22,7 @@ void testEsListaVacia(){
 	lista l = crearlista();
 	int ok = esListaVacia(l);
 	printf("Test eslistavacia \n");
-	dato *d; 
+	dato *d = malloc (sizeof(dato)); 
 	nodo *tmp = malloc (sizeof(nodo));
 	*d =1;
 	tmp->dato = d;
@@ -35,6 +37,10 @@ void testEsListaVacia(){
 	} else {
 		printf("***********************FAIL***********************\n\n");
 	}
+	free (d);
+	free (tmp);
+	free (l->ant);
+	free (l);
 }
 
 void testPrimera(){

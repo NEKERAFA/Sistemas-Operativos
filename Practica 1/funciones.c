@@ -151,9 +151,9 @@ void print_fileinfo(struct stat file_info) {
    gmtime_r(&thora_actual, shora_actual);
    gmtime_r(&file_info.st_mtime, shora_fichero);
    if ((shora_actual->tm_year) == (shora_fichero->tm_year)) {
-      strftime(hora_fichero, sizeof(hora_fichero), "%b %d %H:%M", shora_fichero);
+      strftime(hora_fichero, sizeof(*hora_fichero), "%b %d %H:%M", shora_fichero);
    } else {
-      strftime(hora_fichero, sizeof(hora_fichero), "%b %d %Y ", shora_fichero);
+      strftime(hora_fichero, sizeof(*hora_fichero), "%b %d %Y ", shora_fichero);
    }
    printf("%s ", hora_fichero);
 
@@ -235,7 +235,7 @@ void deltree(char * parametro){
             if(!strcmp(archivo->d_name ,".")||!strcmp(archivo->d_name ,"..")){
                continue;
             } else{
-               sprintf(path,"%s%s%s",parametro,path[strlen(path)-1] == '/' ? "" : "/",archivo->d_name);
+               sprintf(path,"%s%s%s",parametro,parametro[strlen(parametro)-1] == '/' ? "" : "/",archivo->d_name);
                if(stat(path,&archivo_info)== -1){
                   printf("Imposible eliminar el directorio\n");
                }else{
