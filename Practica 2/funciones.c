@@ -150,9 +150,9 @@ void print_fileinfo(struct stat file_info) {
    gmtime_r(&thora_actual, shora_actual);
    gmtime_r(&file_info.st_mtime, shora_fichero);
    if ((shora_actual->tm_year) == (shora_fichero->tm_year)) {
-      strftime(hora_fichero, sizeof(hora_fichero), "%b %d %H:%M", shora_fichero);
+      strftime(hora_fichero, sizeof(char)*32, "%b %d %H:%M", shora_fichero);
    } else {
-      strftime(hora_fichero, sizeof(hora_fichero), "%b %d %Y ", shora_fichero);
+      strftime(hora_fichero, sizeof(char)*32, "%b %d %Y ", shora_fichero);
    }
    printf("%s ", hora_fichero);
 
@@ -214,7 +214,7 @@ void listdir( int argc, char * argv[] ) {
    }
 }
 
-//elimina recursivamente directorios
+// Elimina recursivamente directorios
 void deltree(char * parametro){
    char path[1000];
    DIR * directorio;
@@ -222,30 +222,39 @@ void deltree(char * parametro){
    struct stat archivo_info;
    path[0]='\0';
 
-   if(parametro == NULL){//Si no se le pasa ninguna ruta a la funcion
+   // Si no se le pasa ninguna ruta a la funcion
+   if(parametro == NULL){
       printf("Error: hay que pasar un parametro");
    }else{
-      if((directorio=opendir(parametro))==NULL){//Si no se puede abrir el directorio
+      // Si no se puede abrir el directorio
+      if((directorio = opendir(parametro)) == NULL) {
          perror("Error: no se ha podido abrir el directorio: ");
-      }else{
-         while((archivo = readdir(directorio))!=NULL){//Se leen todas las entradas de directorio
-            if(!strcmp(archivo->d_name ,".")||!strcmp(archivo->d_name ,"..")){//Se excluyen del procesado los directorios . y ..
+      } else {
+         // Se leen todas las entradas de directorio
+         while((archivo = readdir(directorio))!=NULL) {
+            // Se excluyen del procesado los directorios . y ..
+            if(!strcmp(archivo->d_name, ".") || !strcmp(archivo->d_name, "..")) {
                continue;
-            } else{
-               sprintf(path,"%s%s%s",parametro,path[strlen(path)-1] == '/' ? "" : "/",archivo->d_name);
-               if(stat(path,&archivo_info)== -1){//se comprueba si hay acceso a la entrada de directorio
+            } else {
+               sprintf(path,"%s%s%s", parametro, parametro[strlen(parametro)-1] == '/' ? "" : "/", archivo->d_name);
+               // Se comprueba si hay acceso a la entrada de directorio
+               if(stat(path,&archivo_info) == -1) {
                   printf("Imposible eliminar el directorio\n");
-               }else{
-                  if(archivo_info.st_mode & S_IFDIR){//Si la entrada es un directorio se llama de nuevo a esta función
+               } else {
+                  // Si la entrada es un directorio se llama de nuevo a esta función
+                  if(archivo_info.st_mode & S_IFDIR) {
                      deltree(path);
-                  }else{//Si no es un directorio se elimina el archivo
+                  // Si no es un directorio se elimina el archivo
+                  } else {
                      removefile(path);
                   }
                }
             }
          }
-         removefile(parametro);//Finalmente borramos el directorio actual
-         closedir(directorio);//Y cerramos el directorio
+         // Finalmente borramos el directorio actual
+         removefile(parametro);
+         // Y cerramos el directorio
+         closedir(directorio);
       }
    }
 }
@@ -286,8 +295,8 @@ void dofork() {
 // Ejecuta un programa sin crear un proceso nuevo
 void execprog(char * argv[]) {
    if(argv[0] == NULL) printf("exec: Se necesita un argumento mínimo\n");
-   else if(execvp(argv[0], argv) == -1) perror("Error al ejecutar");
-   exit(0);
+   else
+      execvp(argv[0], argv); perror("Error al ejecutar"); exit(0);
 }
 
 // Ejecuta un programa sin crear un proceso nuevo
@@ -297,8 +306,7 @@ void execprogpri(int argc, char * argv[]) {
    else {
       if (setpriority(PRIO_PROCESS, 0, atoi(argv[0])) == -1)
          perror("Error al establecer la prioridad");
-      else if(execvp(argv[1], argv+1) == -1) perror("Error al ejecutar");
-      exit(0);
+      else execprog(argv+1);
    }
 }
 
@@ -307,15 +315,11 @@ void primerplano(char * argv[]) {
    int pid;
 
    if(argv[0] == NULL) printf("pplano: Se necesita un argumento mínimo\n");
-   if((pid = fork()) == 0) {
-      if(execvp(argv[0], argv) == -1) perror("Error al ejecutar");
-      exit(0);
-   } else {
-      waitpid(pid, NULL, 0);
-   }
+   if((pid = fork()) == 0) execprog(argv);
+   else waitpid(pid, NULL, 0);
 }
 
-// Crea un proceso en primer plano
+// Crea un proceso en primer plano prioridad
 void primerplanopri(int argc, char * argv[]) {
    int pid;
 
@@ -325,11 +329,8 @@ void primerplanopri(int argc, char * argv[]) {
       if((pid = fork()) == 0) {
          if (setpriority(PRIO_PROCESS, 0, atoi(argv[0])) == -1)
             perror("Error al establecer la prioridad");
-         else if(execvp(argv[1], argv) == -1) perror("Error al ejecutar");
-         exit(0);
-      } else {
-         waitpid(pid, NULL, 0);
-      }
+         else execprog(argv+1);
+      } else waitpid(pid, NULL, 0);
    }
 }
 
