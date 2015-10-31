@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <stdio.h>
-
 #include "lista.h"
 
    static nodo *crearnodo(){
@@ -74,7 +73,7 @@
    }
 
    posicion buscarDato(int pid, lista l) {
-      if esListaVacia(l) return NULL;
+      if (esListaVacia(l)) return NULL;
       posicion p = primera(l);
 
       while (!esfindelista(p, l) && p->dato->pid != pid) siguiente(p, l);
@@ -99,7 +98,7 @@
       posicion tmp = p;
       tmp->ant->sig =tmp->sig;
       tmp->sig->ant =tmp->ant;
-      eliminardato($(l->dato));
+      eliminardato((l->dato));
       free(tmp);
    }
 
@@ -118,7 +117,7 @@
    }
 
    dato* nuevodato(int pid, int prio, int status, time_t hora_ini, char * comando){
-      dato d = creardato();
+      dato * d = creardato();
 
       d->pid = pid;
       d->prio = prio;

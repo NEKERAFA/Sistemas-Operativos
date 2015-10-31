@@ -11,6 +11,7 @@
 #include <grp.h>
 #include <fcntl.h>
 #include "funciones.h"
+#include "lista.h"
 
 // Muestra en pantalla el pid actual o el pid padre
 void pid(char * parametro) {
@@ -334,8 +335,12 @@ void primerplanopri(int argc, char * argv[]) {
    }
 }
 
-void segundoplano(){
-   printf("Función no implementada todavía\n");
+void segundoplano(char * argv[], lista l) {
+   int pid;
+
+   if(argv[0] == NULL) printf("splano: Se necesita un argumento mínimo\n");
+   if((pid = fork()) == 0) execprog(argv);
+   else insertarproceso(pid, argv, l);
 }
 
 void segundoplanopri(){
