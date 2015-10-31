@@ -26,17 +26,17 @@ deltree: funciones
 
 lista: 
 	echo -e '\e[32mCompilando modulo lista\e[0m'
-	$(CC) $(CFLAGS) -c lista.c -o lista.o
+	$(CC) $(CFLAGS) -c lista.c
 
 gdb:
 	echo -e '\e[32mCompilando en modo debug...\e[0m'
 	$(CC) -g -O0 main.c funciones.c -o $(OBJ_SHELL)
-	$(CC) -g -O0 lista.c funciones.c -o $(OBJ_LISTA)
+	$(CC) -g -O0 listar.c funciones.c -o $(OBJ_LISTAR)
 	$(CC) -g -O0 deltree.c funciones.c -o $(OBJ_DELTR)
 
 clean:
 	echo -e '\e[32mLimpiando...\e[0m'
-	rm -f *.o $(OBJ_SHELL) $(OBJ_LISTA) $(OBJ_DELTR)
+	rm -f *.o $(OBJ_SHELL) $(OBJ_LISTAR) $(OBJ_DELTR)
 
 prueba_deltree:
 	echo -e '\e[32mPrueba de la funcion deltree\e[0m'

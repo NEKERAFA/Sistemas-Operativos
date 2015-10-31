@@ -105,7 +105,7 @@ char * modoarchivo(mode_t f_mode) {
 }
 
 // Obtiene los argumentos
-int getarg(int argc, char * argv[], char * *path) {
+int getarg(int argc, char * argv[], char ** path) {
    int flags = 0;
    int i;
 
