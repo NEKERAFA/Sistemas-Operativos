@@ -347,8 +347,13 @@ void segundoplanopri(){
    printf("Función no implementada todavía\n");
 }
 
-void jobs(){
-   printf("Función no implementada todavía\n");
+void jobs(lista l){
+   posicion p = primera(l);
+
+   printf("%6s %6s %10s %6s %6s %s\n", "PID", "NICE", "TIME", "STATUS", "RETURN", "CMD");
+   while(p!=NULL) {
+      p = siguiente(p, l);
+   }
 }
 
 void clearjobs(){
