@@ -25,18 +25,29 @@ void deltree( char * dir );
 void dofork();
 
 // Obtiene la prioridad
-void getprioridad(char * parametro);
+void getprioridad( char * parametro );
 
 // Establece la prioridad
-void setprioridad(int argc, char * argv[]);
+void setprioridad( int argc, char * argv[] );
 
 // Ejecuta un programa sin crear un proceso nuevo
-void execprog(char * argv[]);
+void execprog( char * argv[] );
 
 // Ejecuta un programa sin crear un proceso nuevo
-void execprogpri(int argc, char * argv[]);
+void execprogpri( int argc, char * argv[] );
 
 // Crea un proceso en primer plano
-void primerplanopri(int argc, char * argv[]);
+void primerplano( char * argv[] );
+
+// Crea un proceso en primer plano con prioridad
+void primerplanopri( int argc, char * argv[] );
+
+void segundoplano();
+
+void segundoplanopri();
+
+void jobs();
+
+void clearjobs();
 
 #endif // _FUNCIONES_H_

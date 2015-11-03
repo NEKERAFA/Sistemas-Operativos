@@ -11,6 +11,7 @@
 #include <grp.h>
 #include <fcntl.h>
 #include "funciones.h"
+#include "lista.h"
 
 // Muestra en pantalla el pid actual o el pid padre
 void pid(char * parametro) {
@@ -105,7 +106,7 @@ char * modoarchivo(mode_t f_mode) {
 }
 
 // Obtiene los argumentos
-int getarg(int argc, char * argv[], char * *path) {
+int getarg(int argc, char * argv[], char ** path) {
    int flags = 0;
    int i;
 
@@ -150,9 +151,9 @@ void print_fileinfo(struct stat file_info) {
    gmtime_r(&thora_actual, shora_actual);
    gmtime_r(&file_info.st_mtime, shora_fichero);
    if ((shora_actual->tm_year) == (shora_fichero->tm_year)) {
-      strftime(hora_fichero, sizeof(hora_fichero), "%b %d %H:%M", shora_fichero);
+      strftime(hora_fichero, sizeof(char)*32, "%b %d %H:%M", shora_fichero);
    } else {
-      strftime(hora_fichero, sizeof(hora_fichero), "%b %d %Y ", shora_fichero);
+      strftime(hora_fichero, sizeof(char)*32, "%b %d %Y ", shora_fichero);
    }
    printf("%s ", hora_fichero);
 
@@ -214,7 +215,7 @@ void listdir( int argc, char * argv[] ) {
    }
 }
 
-//elimina recursivamente directorios
+// Elimina recursivamente directorios
 void deltree(char * parametro){
    char path[1000];
    DIR * directorio;
@@ -222,30 +223,39 @@ void deltree(char * parametro){
    struct stat archivo_info;
    path[0]='\0';
 
-   if(parametro == NULL){//Si no se le pasa ninguna ruta a la funcion
+   // Si no se le pasa ninguna ruta a la funcion
+   if(parametro == NULL){
       printf("Error: hay que pasar un parametro");
    }else{
-      if((directorio=opendir(parametro))==NULL){//Si no se puede abrir el directorio
+      // Si no se puede abrir el directorio
+      if((directorio = opendir(parametro)) == NULL) {
          perror("Error: no se ha podido abrir el directorio: ");
-      }else{
-         while((archivo = readdir(directorio))!=NULL){//Se leen todas las entradas de directorio
-            if(!strcmp(archivo->d_name ,".")||!strcmp(archivo->d_name ,"..")){//Se excluyen del procesado los directorios . y ..
+      } else {
+         // Se leen todas las entradas de directorio
+         while((archivo = readdir(directorio))!=NULL) {
+            // Se excluyen del procesado los directorios . y ..
+            if(!strcmp(archivo->d_name, ".") || !strcmp(archivo->d_name, "..")) {
                continue;
-            } else{
-               sprintf(path,"%s%s%s",parametro,path[strlen(path)-1] == '/' ? "" : "/",archivo->d_name);
-               if(stat(path,&archivo_info)== -1){//se comprueba si hay acceso a la entrada de directorio
+            } else {
+               sprintf(path,"%s%s%s", parametro, parametro[strlen(parametro)-1] == '/' ? "" : "/", archivo->d_name);
+               // Se comprueba si hay acceso a la entrada de directorio
+               if(stat(path,&archivo_info) == -1) {
                   printf("Imposible eliminar el directorio\n");
-               }else{
-                  if(archivo_info.st_mode & S_IFDIR){//Si la entrada es un directorio se llama de nuevo a esta función
+               } else {
+                  // Si la entrada es un directorio se llama de nuevo a esta función
+                  if(archivo_info.st_mode & S_IFDIR) {
                      deltree(path);
-                  }else{//Si no es un directorio se elimina el archivo
+                  // Si no es un directorio se elimina el archivo
+                  } else {
                      removefile(path);
                   }
                }
             }
          }
-         removefile(parametro);//Finalmente borramos el directorio actual
-         closedir(directorio);//Y cerramos el directorio
+         // Finalmente borramos el directorio actual
+         removefile(parametro);
+         // Y cerramos el directorio
+         closedir(directorio);
       }
    }
 }
@@ -286,8 +296,8 @@ void dofork() {
 // Ejecuta un programa sin crear un proceso nuevo
 void execprog(char * argv[]) {
    if(argv[0] == NULL) printf("exec: Se necesita un argumento mínimo\n");
-   else if(execvp(argv[0], argv) == -1) perror("Error al ejecutar");
-   exit(0);
+   else
+      execvp(argv[0], argv); perror("Error al ejecutar"); exit(0);
 }
 
 // Ejecuta un programa sin crear un proceso nuevo
@@ -297,8 +307,7 @@ void execprogpri(int argc, char * argv[]) {
    else {
       if (setpriority(PRIO_PROCESS, 0, atoi(argv[0])) == -1)
          perror("Error al establecer la prioridad");
-      else if(execvp(argv[1], argv+1) == -1) perror("Error al ejecutar");
-      exit(0);
+      else execprog(argv+1);
    }
 }
 
@@ -307,15 +316,11 @@ void primerplano(char * argv[]) {
    int pid;
 
    if(argv[0] == NULL) printf("pplano: Se necesita un argumento mínimo\n");
-   if((pid = fork()) == 0) {
-      if(execvp(argv[0], argv) == -1) perror("Error al ejecutar");
-      exit(0);
-   } else {
-      waitpid(pid, NULL, 0);
-   }
+   if((pid = fork()) == 0) execprog(argv);
+   else waitpid(pid, NULL, 0);
 }
 
-// Crea un proceso en primer plano
+// Crea un proceso en primer plano con prioridad
 void primerplanopri(int argc, char * argv[]) {
    int pid;
 
@@ -325,16 +330,9 @@ void primerplanopri(int argc, char * argv[]) {
       if((pid = fork()) == 0) {
          if (setpriority(PRIO_PROCESS, 0, atoi(argv[0])) == -1)
             perror("Error al establecer la prioridad");
-         else if(execvp(argv[1], argv) == -1) perror("Error al ejecutar");
-         exit(0);
-      } else {
-         waitpid(pid, NULL, 0);
-      }
+         else execprog(argv+1);
+      } else waitpid(pid, NULL, 0);
    }
-}
-
-void segundoplano(char * argv[]){
-   printf("Función no implementada todavía\n");
 }
 
 void segundoplanopri(char * argv[]){
@@ -351,12 +349,75 @@ void jobs(char * argv[]){
    // si el parametro es un int debe mostrar la información del proceso con ese pid
 
 
+   //Algoritmo:
+   //1.- Actualizar la lista de procesos en segundo plano
+   //2.- Comprobar si hay parámetros
+   //3.- Si lo hay comprobar que hay que hacer
+   //4.- Filtrar la lista en función de los parámetros
+   //5.- Mostrar la lista filtrada
+
    printf("Función no implementada todavía\n");
 }
 
+//Limpia los procesos terminados
 void clearjobs(char * argv[]){
    //Algoritmo:
    //Se actualiza la lista de procesos
    //se recorre la lista y se eliminan todos aquellos cuyo estado sea term o sign
+}
+
+
+// Crea un proceso en segundo plano
+void segundoplano(char * argv[], lista l) {
+   int pid;
+
+   if(argv[0] == NULL) printf("splano: Se necesita un argumento mínimo\n");
+   if((pid = fork()) == 0) execprog(argv);
+   else insertarproceso(pid, argv, l);
+}
+
+// Crea un proceso en segundo plano con prioridad
+void segundoplanopri(){
    printf("Función no implementada todavía\n");
 }
+
+// Muestra el estado de un proceso
+void mostarestado(int estado) {
+   if (WIFEXITED(estado))
+      printf("%8s %6i", "EXITED", WEXITSTATUS(estado));
+   else if (WIFSIGNALED(estado))
+      printf("%8s %6i", "SIGTERM", WTERMSIG(estado));
+   else if (WIFSTOPPED(estado))
+      printf("%8s %6i", "STOPPED", WSTOPSIG(estado));
+   else
+      printf("%8s %6s", "RUNNING", "");
+}
+
+// Muestra el tiempo inicial
+void tiempoinicio(time_t tiempo) {
+   struct tm * stiempo = (struct tm *) malloc(sizeof(struct tm));
+   gmtime_r(&tiempo, stiempo);
+   char * ctiempo = (char *) malloc(32*sizeof(char));
+   strftime(ctiempo, 32*sizeof(char), "%h:%m", stiempo);
+   printf("%10s", ctiempo);
+   free(ctiempo);
+   free(stiempo);
+}
+
+// Muestra la lista de procesos en segundo plano
+/*void jobs(lista l){
+   posicion p = primera(l);
+   dato * d;
+
+   printf("%4s %4s %10s %8s %6s %s\n", "PID", "NICE", "TIME", "STATUS", "RETURN", "CMD");
+   while(!esfindelista(p, l)) {
+      d = getDato(p, l);
+      printf("%4i %4i", d->pid, d->prio);
+      tiempoinicio(d->hora_ini);
+      mostarestado(d->status);
+      printf("%s\n", d->comando);
+      p = siguiente(p, l);
+   }
+}
+
+*/

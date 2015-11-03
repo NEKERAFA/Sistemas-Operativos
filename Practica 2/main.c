@@ -3,6 +3,8 @@
 #include <string.h>
 #include <unistd.h>
 #include "funciones.h"
+#include "utilidades.h"
+#include "lista.h"
 
 int const TAM_ENTRADA = 1024;
 
@@ -19,16 +21,8 @@ void leerentrada(char * entrada, int tamano_entrada) {
    }
 }
 
-// Divide la cadena en trozos
-int dividircadena(char * cadena, char * trozos[]) {
-   int i = 1;
-   if((trozos[0] = strtok(cadena, " \n\t")) == NULL) { return 0; }
-   while((trozos[i] = strtok(NULL, " \n\t")) != NULL) { i++; }
-   return i;
-}
-
 // Procesa la entrada para ejecutar los comandos
-void procesarentrada(char * entrada, char * dir_act, int * salir) {
+void procesarentrada(char * entrada, char * dir_act, lista l, int * salir) {
    char * c_parametros[TAM_ENTRADA/4];
    int n_parametros;
    n_parametros = dividircadena(entrada, c_parametros);
@@ -58,6 +52,7 @@ void procesarentrada(char * entrada, char * dir_act, int * salir) {
          execprogpri(n_parametros-1, c_parametros+1);
       } else if (!strcmp(c_parametros[0], "pplano")) {
          primerplano(c_parametros+1);
+<<<<<<< HEAD
       } else if (!strcmp(c_parametros[0], "splano")) {
          segundoplano(c_parametros+1);
       } else if (!strcmp(c_parametros[0], "splanopri")) {
@@ -66,6 +61,14 @@ void procesarentrada(char * entrada, char * dir_act, int * salir) {
          jobs(c_parametros+1);
       } else if (!strcmp(c_parametros[0], "clearjobs")) {
          clearjobs(c_parametros+1);
+=======
+      } else if (!strcmp(c_parametros[0], "pplanopri")) {
+         primerplanopri(n_parametros-1, c_parametros+1);
+      } else if (!strcmp(c_parametros[0], "splano")) {
+         segundoplano(c_parametros+1, l);
+      } else if (!strcmp(c_parametros[0], "jobs")) {
+         jobs(c_parametros+1, l);
+>>>>>>> 38a56200daf7f9d3d0d9d371112aa9b10e393f4f
       } else {
          primerplano(c_parametros);
       }
@@ -77,6 +80,8 @@ int main(int argc, char const *argv[]) {
    int fin = 0;
    char entrada[TAM_ENTRADA];
    char dir_act[2048];
+   lista procesoshijo = crearlista();
+
    if (getcwd(dir_act, 2048) == NULL) {
       perror("Imposible obtener el directorio actual");
       exit(-1);
@@ -87,8 +92,7 @@ int main(int argc, char const *argv[]) {
    while(!fin) {
       prompt(dir_act);
       leerentrada(entrada, TAM_ENTRADA);
-      procesarentrada(entrada, dir_act, &fin);
+      procesarentrada(entrada, dir_act, procesoshijo, &fin);
    }
-
    return 0;
 }
