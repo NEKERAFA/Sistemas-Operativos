@@ -333,18 +333,30 @@ void primerplanopri(int argc, char * argv[]) {
    }
 }
 
-void segundoplano(){
+void segundoplano(char * argv[]){
    printf("Función no implementada todavía\n");
 }
 
-void segundoplanopri(){
+void segundoplanopri(char * argv[]){
    printf("Función no implementada todavía\n");
 }
 
-void jobs(){
+void jobs(char * argv[]){
+   // si no hay parametros debe mostrar todos los procesos
+   // si el parametro es all debe mostrar todos los procesos
+   // si el parametro es term debe mostrar los procesos terminados normalmente
+   // si el parametro es sig debe mostrar los procesos terminados por señal
+   // si el parametro es stop debe mostrar los procesos parados
+   // si el parametro es act debe mostrar los procesos activos
+   // si el parametro es un int debe mostrar la información del proceso con ese pid
+
+
    printf("Función no implementada todavía\n");
 }
 
-void clearjobs(){
+void clearjobs(char * argv[]){
+   //Algoritmo:
+   //Se actualiza la lista de procesos
+   //se recorre la lista y se eliminan todos aquellos cuyo estado sea term o sign
    printf("Función no implementada todavía\n");
 }

@@ -108,7 +108,7 @@
 		*l=NULL;
 	}
 	
-	dato* creardato(int pid, int prio, int status, time_t hora_ini, char * comando){
+	dato* creardato(int pid, int prio, int status, int senal, time_t hora_ini, char * comando){
 		dato d = creardato();
 
 		d->pid = pid;
@@ -116,6 +116,7 @@
 		d->status = status;
 		d->hora_ini = hora_ini;
 		d->comando = comando;
+		d->senal = senal;
 
 		return d;
 	}

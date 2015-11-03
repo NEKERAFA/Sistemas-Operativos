@@ -5,6 +5,7 @@
 		int pid;
 		int prio;
 		int status;
+		int signal;
 		time_t hora_ini;
 		char * comando;
 	};
@@ -34,6 +35,6 @@
 	int eliminar (posicion p, lista l);
 	int actualizarDato (dato *d,posicion p,lista l);
 	void eliminarLista(lista *l);
-	dato* creardato(int pid, int prio, int status, time_t hora_ini, char * comando);
+	dato* creardato(int pid, int prio, int status, int senal, time_t hora_ini, char * comando);
 	int eliminardato(dato *d);
 #endif
