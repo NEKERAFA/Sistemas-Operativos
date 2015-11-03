@@ -20,9 +20,10 @@ insertarproceso(int pid, char * argv[], lista l) {
    time_t tiempoactual = time(NULL);
    dato * proc;
    char * comando;
+   int rwait = waitpid(pid, &estado, WNOHANG | WUNTRACED | WCONTINUED);
 
    juntarvector(comando, argv);
-   if(pid != waitpid(pid, &estado, WNOHANG | WUNTRACED | WCONTINUED))
+   if((pid != rwait) && (rwait != 0))
       perror("No se puede obtener el estado del proceso");
    else if ((prioridad = getpriority(PRIO_PROCESS, pid)) == -1)
          perror("No se puede obtener la prioridad del proceso");
@@ -41,7 +42,7 @@ actualizaproceso(posicion p, lista l) {
    dato * proc = getDato(p, l);
 
    waitpidresult = waitpid(proc->pid, &estado, WNOHANG | WUNTRACED | WCONTINUED);
-   if((waitpidresult != 0) || (proc->pid != waitpidresult))
+   if((waitpidresult != 0) && (proc->pid != waitpidresult))
       perror("No se puede obtener el estado del proceso");
    else if (proc->pid != waitpidresult)
       if ((proc->prio = getpriority(PRIO_PROCESS, proc->pid)) == -1)

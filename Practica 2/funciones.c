@@ -320,7 +320,7 @@ void primerplano(char * argv[]) {
    else waitpid(pid, NULL, 0);
 }
 
-// Crea un proceso en primer plano prioridad
+// Crea un proceso en primer plano con prioridad
 void primerplanopri(int argc, char * argv[]) {
    int pid;
 
@@ -335,6 +335,7 @@ void primerplanopri(int argc, char * argv[]) {
    }
 }
 
+// Crea un proceso en segundo plano
 void segundoplano(char * argv[], lista l) {
    int pid;
 
@@ -343,19 +344,51 @@ void segundoplano(char * argv[], lista l) {
    else insertarproceso(pid, argv, l);
 }
 
+// Crea un proceso en segundo plano con prioridad
 void segundoplanopri(){
    printf("Función no implementada todavía\n");
 }
 
+// Muestra el estado de un proceso
+void mostarestado(int estado) {
+   if (WIFEXITED(estado))
+      printf("%8s %6i", "EXITED", WEXITSTATUS(estado));
+   else if (WIFSIGNALED(estado))
+      printf("%8s %6i", "SIGTERM", WTERMSIG(estado));
+   else if (WIFSTOPPED(estado))
+      printf("%8s %6i", "STOPPED", WSTOPSIG(estado));
+   else
+      printf("%8s %6s", "RUNNING", "");
+}
+
+// Muestra el tiempo inicial
+void tiempoinicio(time_t tiempo) {
+   struct tm * stiempo = (struct tm *) malloc(sizeof(struct tm));
+   gmtime_r(&tiempo, stiempo);
+   char * ctiempo = (char *) malloc(32*sizeof(char));
+   strftime(ctiempo, 32*sizeof(char), "%h:%m", stiempo);
+   printf("%10s", ctiempo);
+   free(ctiempo);
+   free(stiempo);
+}
+
+// Muestra la lista de procesos en segundo plano
 void jobs(lista l){
    posicion p = primera(l);
+   dato * d;
 
-   printf("%6s %6s %10s %6s %6s %s\n", "PID", "NICE", "TIME", "STATUS", "RETURN", "CMD");
-   while(p!=NULL) {
+   printf("%4s %4s %10s %8s %6s %s\n", "PID", "NICE", "TIME", "STATUS", "RETURN", "CMD");
+   while(!esfindelista(p, l)) {
+      d = getDato(p, l);
+      printf("%4i %4i", d->pid, d->prio);
+      tiempoinicio(d->hora_ini);
+      mostarestado(d->status);
+      printf("%s\n", d->comando);
       p = siguiente(p, l);
    }
 }
 
+// Limpia los procesos
 void clearjobs(){
    printf("Función no implementada todavía\n");
 }
