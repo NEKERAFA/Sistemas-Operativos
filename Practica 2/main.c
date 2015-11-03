@@ -52,23 +52,17 @@ void procesarentrada(char * entrada, char * dir_act, lista l, int * salir) {
          execprogpri(n_parametros-1, c_parametros+1);
       } else if (!strcmp(c_parametros[0], "pplano")) {
          primerplano(c_parametros+1);
-<<<<<<< HEAD
-      } else if (!strcmp(c_parametros[0], "splano")) {
-         segundoplano(c_parametros+1);
-      } else if (!strcmp(c_parametros[0], "splanopri")) {
-         segundoplanopri(c_parametros+1);
-      } else if (!strcmp(c_parametros[0], "jobs")) {
-         jobs(c_parametros+1);
+
       } else if (!strcmp(c_parametros[0], "clearjobs")) {
-         clearjobs(c_parametros+1);
-=======
+         clearjobs(c_parametros+1, l);
+
       } else if (!strcmp(c_parametros[0], "pplanopri")) {
          primerplanopri(n_parametros-1, c_parametros+1);
       } else if (!strcmp(c_parametros[0], "splano")) {
          segundoplano(c_parametros+1, l);
       } else if (!strcmp(c_parametros[0], "jobs")) {
          jobs(c_parametros+1, l);
->>>>>>> 38a56200daf7f9d3d0d9d371112aa9b10e393f4f
+
       } else {
          primerplano(c_parametros);
       }

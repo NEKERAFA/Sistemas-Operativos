@@ -1,6 +1,6 @@
 #ifndef _LISTA_
 #define _LISTA_
-<<<<<<< HEAD
+
 	//Declaración de tipos
 	struct dato {
 		int pid;
@@ -10,18 +10,10 @@
 		time_t hora_ini;
 		char * comando;
 	};
-=======
-   //Declaración de tipos
-   struct dato {
-      int pid;
-      int prio;
-      int status;
-      time_t hora_ini;
-      char * comando;
-   };
->>>>>>> 38a56200daf7f9d3d0d9d371112aa9b10e393f4f
 
-   typedef struct dato dato;
+   typedef struct nodo nodo;
+   typedef nodo *posicion;
+   typedef nodo *lista;
 
    struct nodo {
       dato *dato;
@@ -29,7 +21,6 @@
       struct nodo *ant;
    };
 
-<<<<<<< HEAD
 	//Cabeceras de funciones
 	lista crearlista();
 	int esListaVacia(lista l);
@@ -45,27 +36,7 @@
 	void eliminarLista(lista *l);
 	dato* creardato(int pid, int prio, int status, int senal, time_t hora_ini, char * comando);
 	int eliminardato(dato *d);
-#endif
-=======
-   typedef struct nodo nodo;
-   typedef nodo *posicion;
-   typedef nodo *lista;
+	posicion buscarDato(int pid, lista l);
 
-   //Cabeceras de funciones
-   lista crearlista();
-   int esListaVacia(lista l);
-   posicion primera(lista l);
-   posicion ultima(lista l);
-   posicion anterior(posicion p, lista l);
-   posicion siguiente(posicion p, lista l);
-   int esfindelista(posicion p, lista l);
-   dato* getDato(posicion p, lista l);
-   posicion buscarDato(int pid, lista l);
-   int insertar(dato *d, lista l);
-   int eliminar(posicion p, lista l);
-   int actualizarDato(dato *d, posicion p,lista l);
-   void eliminarLista(lista *l);
-   dato* nuevodato(int pid, int prio, int status, time_t hora_ini, char * comando);
-   int eliminardato(dato *d);
 #endif
->>>>>>> 38a56200daf7f9d3d0d9d371112aa9b10e393f4f
+
