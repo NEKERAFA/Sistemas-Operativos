@@ -374,17 +374,19 @@ void tiempoinicio(time_t tiempo) {
 
 // Muestra la lista de procesos en segundo plano
 void jobs(lista l){
-   posicion p = primera(l);
-   dato * d;
+   if(!esListaVacia(l)) {
+      posicion p = primera(l);
+      dato * d;
 
-   printf("%4s %4s %10s %8s %6s %s\n", "PID", "NICE", "TIME", "STATUS", "RETURN", "CMD");
-   while(!esfindelista(p, l)) {
-      d = getDato(p, l);
-      printf("%4i %4i", d->pid, d->prio);
-      tiempoinicio(d->hora_ini);
-      mostarestado(d->status);
-      printf("%s\n", d->comando);
-      p = siguiente(p, l);
+      printf("%4s %4s %10s %8s %6s %s\n", "PID", "NICE", "TIME", "STATUS", "RETURN", "CMD");
+      while(!esfindelista(p, l)) {
+         d = getDato(p, l);
+         printf("%4i %4i", d->pid, d->prio);
+         tiempoinicio(d->hora_ini);
+         mostarestado(d->status);
+         printf("%s\n", d->comando);
+         p = siguiente(p, l);
+      }
    }
 }
 

@@ -31,8 +31,6 @@ insertarproceso(int pid, char * argv[], lista l) {
          proc = nuevodato(pid, prioridad, *estado, tiempoactual, comando);
          insertar(proc, l);
       }
-
-   free(estado);
 }
 
 // Actualiza un proceso de la lista de procesos
