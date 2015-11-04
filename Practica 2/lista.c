@@ -35,7 +35,7 @@
 
    int esListaVacia(lista l){
 
-      return ((l->sig ==l)&&(l->ant = l));
+      return (l->sig == NULL);
    }
 
    posicion primera (lista l){
@@ -65,7 +65,7 @@
    }
 
    int esfindelista(posicion p, lista l){
-      return (p->sig == l);
+      return (p->sig == NULL);
    }
 
    dato* getDato (posicion p,lista l){
@@ -88,7 +88,7 @@
 
          tmp->dato = d;
          tmp->ant= p;
-         tmp->sig=l;
+         tmp->sig=NULL;
 
          l->ant = tmp;
          p->sig = tmp;
@@ -101,14 +101,12 @@
    void eliminar (posicion p, lista l){
       posicion tmp = p;
       tmp->ant->sig =tmp->sig;
-      tmp->sig->ant =tmp->ant;
+      if(p != ultima(l)) tmp->sig->ant =tmp->ant;
       free(tmp);
    }
 
    void actualizarDato (dato *d, posicion p, lista l){
-      dato *tmp = p->dato;
       p->dato = d;
-      free(tmp);
    }
 
    void eliminarLista(lista *l){
