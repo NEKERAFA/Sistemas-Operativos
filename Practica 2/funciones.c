@@ -125,9 +125,8 @@ int getarg(int argc, char * argv[], char ** path) {
             }
          } else { *path = argv[i]; }
       }
-
-      return flags;
    }
+   return flags;
 }
 
 // Imprime información sobre el fichero
@@ -289,7 +288,7 @@ void setprioridad(int argc, char * argv[]) {
 // Crea un hijo y espera a que el hijo termine
 void dofork() {
    int pid;
-   if((pid = fork()) != 0){ 
+   if((pid = fork()) != 0){
       waitpid(pid, NULL, 0);
    }
 }
@@ -367,7 +366,7 @@ void tiempoinicio(time_t tiempo) {
    struct tm * stiempo = (struct tm *) malloc(sizeof(struct tm));
    gmtime_r(&tiempo, stiempo);
    char * ctiempo = (char *) malloc(32*sizeof(char));
-   strftime(ctiempo, 32*sizeof(char), "%h:%m", stiempo);
+   strftime(ctiempo, 32*sizeof(char), "%H:%M:%S", stiempo);
    printf("%10s ", ctiempo);
    free(ctiempo);
    free(stiempo);
@@ -378,15 +377,17 @@ void jobs(char * trozos[], lista l){
    posicion p = primera(l);
    dato * d;
 
-   printf("%4s %4s %10s %8s %6s %s\n", "PID", "NICE", "TIME", "STATUS", "RETURN", "CMD");
-   while(!esfindelista(p, l)) {
-      actualizaproceso(p, l);
-      d = getDato(p, l);
-      printf("%4i %4i ", d->pid, d->prio);
-      tiempoinicio(d->hora_ini);
-      mostarestado(d->status);
-      printf("%s\n", d->comando);
-      p = siguiente(p, l);
+   if (!esListaVacia(l)) {
+      printf("%4s %4s %10s %8s %6s %s\n", "PID", "NICE", "TIME", "STATUS", "RETURN", "CMD");
+      while(!esfindelista(p, l)) {
+         actualizaproceso(p, l);
+         d = getDato(p, l);
+         printf("%4i %4i ", d->pid, d->prio);
+         tiempoinicio(d->hora_ini);
+         mostarestado(d->status);
+         printf("%s\n", d->comando);
+         p = siguiente(p, l);
+      }
    }
 }
 
