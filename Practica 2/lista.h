@@ -39,8 +39,12 @@
    void actualizarDato(dato *d, posicion p,lista l);
    
    void eliminarLista(lista *l);
+<<<<<<< HEAD
 
    dato* nuevodato(int pid, int prio, char * status, time_t hora_ini, char * comando,int retorno);
    dato* getDato(posicion p, lista l);
+=======
+   dato* nuevodato(int pid, int prio, char * status, int retorno, time_t hora_ini, char * comando);
+>>>>>>> f0a33c5cc4774c1aee73b1b7976eb3362700214a
    void eliminardato(dato *d);
 #endif

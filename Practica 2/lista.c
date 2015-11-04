@@ -114,12 +114,13 @@
       *l=NULL;
    }
 
-   dato* nuevodato(int pid, int prio, char * status, time_t hora_ini, char * comando,int retorno){
+   dato* nuevodato(int pid, int prio, char * status, int retorno, time_t hora_ini, char * comando){
       dato * d = creardato();
 
       d->pid = pid;
       d->prio = prio;
       d->status = status;
+      d->retorno = retorno;
       d->hora_ini = hora_ini;
       d->comando = comando;
       d->retorno = retorno;

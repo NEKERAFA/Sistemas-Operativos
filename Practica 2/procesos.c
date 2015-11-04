@@ -15,59 +15,12 @@
 #include "procesos.h"
 #include "utilidades.h"
 
-// Inserta un proceso en la lista de procesos
-void insertarproceso(int pid, char * argv[], lista l) {
-   char * status = (char *) malloc (6 *sizeof(char));
-   int estado;
-   int prioridad;
-   int waitpidresult;
-   int retorno = 0;
-   time_t tiempoactual = time(NULL);
-   dato * proc;
-   int tamcom = tamannotrozos(argv);
-   char * comando = (char *) malloc(tamcom*sizeof(char));
-
-   juntarvector(comando, argv);
-   waitpidresult = waitpid(pid, &estado, WNOHANG | WUNTRACED | WCONTINUED);
-   if(pid != waitpidresult)
-      printf("No se puede obtener el estado del proceso %i %i", pid, waitpidresult);
-   else if ((prioridad = getpriority(PRIO_PROCESS, pid)) == -1)
-         perror("No se puede obtener la prioridad del proceso");
-      else {
-         sprintf(status,"act");
-         proc = nuevodato(pid, prioridad, status, tiempoactual, comando,retorno);
-         insertar(proc, l);
-      }
-}
-
-// Actualiza un proceso de la lista de procesos
-void actualizaproceso(posicion p, lista l) {
-   int estado;
-   int waitpidresult;
-   dato * proc = getDato(p, l);
-
-   waitpidresult = waitpid(proc->pid, &estado, WNOHANG | WUNTRACED | WCONTINUED);
-   if(proc->pid != waitpidresult)
-      printf("No se puede obtener el estado del proceso");
-   else if ((proc->prio = getpriority(PRIO_PROCESS, proc->pid)) == -1)
-      perror("No se puede obtener la prioridad del proceso");
-   else {
-      proc->status = estado;
-      actualizarDato(proc, p, l);
-   }
-}
-
-// Muestra el estado de un proceso
-void mostarestado(int estado) {
-   if (WIFEXITED(estado))
-      printf("%8s %6i ", "EXITED", WEXITSTATUS(estado));
-   else if (WIFSIGNALED(estado))
-      printf("%8s %6i ", "KILLSIG", WTERMSIG(estado));
-   else if (WIFSTOPPED(estado))
-      printf("%8s %6i ", "STOPPED", WSTOPSIG(estado));
-   else
-      printf("%8s %6s ", "RUNNING", "");
-}
+#define ACT  "ACT"
+#define CONT "CONT"
+#define EXIT "EXIT"
+#define SIGN "SIGN"
+#define STOP "STOP"
+#define UNK  "UNK"
 
 // Muestra el tiempo inicial
 void tiempoinicio(time_t tiempo) {
@@ -80,13 +33,90 @@ void tiempoinicio(time_t tiempo) {
    free(stiempo);
 }
 
-// Mostrar proceso
-void mostrarproceso(posicion p, lista l) {
-   dato * d;
-   d = getDato(p, l);
+// Devuelve el estado del proceso
+char * estadoproceso(int estado) {
+   if (WIFEXITED(estado))
+      return EXIT;
+   else if (WIFSIGNALED(estado))
+      return SIGN;
+   else if (WIFSTOPPED(estado))
+      return STOP;
+   else if (WIFCONTINUED(estado))
+      return CONT;
+   return ACT;
+}
 
+// Devuelve el retorno del proceso
+int retornoproceso(int estado) {
+   if (WIFEXITED(estado))
+      return WEXITSTATUS(estado);
+   else if (WIFSIGNALED(estado))
+      return WTERMSIG(estado);
+   else if (WIFSTOPPED(estado))
+      return WSTOPSIG(estado);
+   else
+      return 0;
+}
+
+// Inserta un proceso en la lista de procesos
+void insertarproceso(int pid, char * argv[], lista l) {
+<<<<<<< HEAD
+   char * status = (char *) malloc (6 *sizeof(char));
+   int estado;
+   int prioridad;
+   int waitpidresult;
+   int retorno = 0;
+=======
+   int prioridad;
+>>>>>>> f0a33c5cc4774c1aee73b1b7976eb3362700214a
+   time_t tiempoactual = time(NULL);
+   dato * proc;
+   int tamcom = tamannotrozos(argv);
+   char * comando = (char *) malloc(tamcom*sizeof(char));
+
+   juntarvector(comando, argv);
+<<<<<<< HEAD
+   waitpidresult = waitpid(pid, &estado, WNOHANG | WUNTRACED | WCONTINUED);
+   if(pid != waitpidresult)
+      printf("No se puede obtener el estado del proceso %i %i", pid, waitpidresult);
+   else if ((prioridad = getpriority(PRIO_PROCESS, pid)) == -1)
+         perror("No se puede obtener la prioridad del proceso");
+      else {
+         sprintf(status,"act");
+         proc = nuevodato(pid, prioridad, status, tiempoactual, comando,retorno);
+         insertar(proc, l);
+      }
+=======
+   if ((prioridad = getpriority(PRIO_PROCESS, pid)) == -1)
+      perror("No se puede obtener la prioridad del proceso");
+   else {
+      proc = nuevodato(pid, prioridad, ACT, 0, tiempoactual, comando);
+      insertar(proc, l);
+   }
+>>>>>>> f0a33c5cc4774c1aee73b1b7976eb3362700214a
+}
+
+// Actualiza un proceso de la lista de procesos
+void actualizaproceso(posicion p, lista l) {
+   int estado;
+   int prior;
+   int waitpidresult;
+   dato * proc = getDato(p, l);
+
+   waitpidresult = waitpid(proc->pid, &estado, WNOHANG | WUNTRACED | WCONTINUED);
+   if(proc->pid == waitpidresult) {
+      prior = getpriority(PRIO_PROCESS, proc->pid);
+      if (prior != -1) proc->prio = prior;
+      proc->status = estadoproceso(estado);
+      proc->retorno = retornoproceso(estado);
+      actualizarDato(proc, p, l);
+   }
+}
+
+// Mostrar proceso
+void mostrarproceso(dato * d, lista l) {
    printf("%4i %4i ", d->pid, d->prio);
    tiempoinicio(d->hora_ini);
-   mostarestado(d->status);
+   printf("%6s %6i ", d->status, d->retorno);
    printf("%s\n", d->comando);
 }
