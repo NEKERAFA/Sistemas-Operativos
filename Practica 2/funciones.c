@@ -335,6 +335,18 @@ void primerplanopri(int argc, char * argv[]) {
    }
 }
 
+void segundoplanopri(char * argv[]){
+   printf("Función no implementada todavía\n");
+}
+
+//Limpia los procesos terminados
+void clearjobs(char * argv[]){
+   //Algoritmo:
+   //Se actualiza la lista de procesos
+   //se recorre la lista y se eliminan todos aquellos cuyo estado sea term o sign
+}
+
+
 // Crea un proceso en segundo plano
 void segundoplano(char * argv[], lista l) {
    int pid;
@@ -387,10 +399,4 @@ void jobs(lista l){
          printf("%s\n", d->comando);
          p = siguiente(p, l);
       }
-   }
-}
-
-// Limpia los procesos
-void clearjobs(){
-   printf("Función no implementada todavía\n");
 }
