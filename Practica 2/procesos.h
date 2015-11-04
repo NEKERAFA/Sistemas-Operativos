@@ -9,6 +9,6 @@ void insertarproceso(int pid, char * argv[], lista l);
 void actualizaproceso( posicion p, lista l );
 
 // Mostrar proceso
-void mostrarproceso( posicion p, lista l );
+void mostrarproceso( dato * d, lista l );
 
 #endif // _PROCESOS_H_

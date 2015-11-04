@@ -352,11 +352,13 @@ void segundoplanopri(){
 // Muestra la lista de procesos en segundo plano
 void jobs(char * trozos[], lista l){
    if(!esListaVacia(l)){
+      dato * d;
       posicion p = primera(l);
-      printf("%4s %4s %10s %8s %6s %s\n", "PID", "NICE", "TIME", "STATUS", "RETURN", "CMD");
+      printf("%4s %4s %10s %6s %6s %s\n", "PID", "NICE", "TIME", "STATUS", "RETURN", "CMD");
       while((p != NULL)&&(!esfindelista(p, l)||(p == ultima (l)))) {
+         d = getDato(p, l);
          actualizaproceso(p, l);
-         mostrarproceso(p, l);
+         mostrarproceso(d, l);
          p = siguiente(p, l);
       }
    }

@@ -4,7 +4,8 @@
    struct dato {
       int pid;
       int prio;
-      int status;
+      char * status;
+      int retorno;
       time_t hora_ini;
       char * comando;
    };
@@ -35,6 +36,6 @@
    void eliminar(posicion p, lista l);
    void actualizarDato(dato *d, posicion p,lista l);
    void eliminarLista(lista *l);
-   dato* nuevodato(int pid, int prio, int status, time_t hora_ini, char * comando);
+   dato* nuevodato(int pid, int prio, char * status, int retorno, time_t hora_ini, char * comando);
    void eliminardato(dato *d);
 #endif
