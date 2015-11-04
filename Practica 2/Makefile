@@ -1,7 +1,7 @@
 # Makefile del shell
 
 CC = gcc
-CFLAGS = -g
+CFLAGS = -g -Wall
 OBJ_FUN = funciones.o
 OBJS = lista.o procesos.o utilidades.o
 OBJ_SHELL = shell.out
@@ -9,11 +9,11 @@ OBJ_LISTAR = listar.out
 OBJ_DELTR = deltree.out
 OBJ_MAIN = main.c funciones.c lista.c procesos.c
 
-all: utilidades funciones lista proceso
+all: utilidades proceso lista funciones
 	echo -e '\e[32mCompilando terminal...\e[0m'
 	$(CC) $(CFLAGS) main.c $(OBJ_FUN) $(OBJS) -o $(OBJ_SHELL)
 
-funciones:
+funciones: lista
 	echo -e '\e[32mCompilando funciones...\e[0m'
 	rm -f funciones.o
 	$(CC) $(CFLAGS) -c funciones.c
@@ -35,7 +35,7 @@ lista:
 	echo -e '\e[32mCompilando modulo lista\e[0m'
 	$(CC) $(CFLAGS) -c lista.c
 
-proceso: 
+proceso: lista utilidades
 	echo -e '\e[32mCompilando modulo proceso\e[0m'
 	$(CC) $(CFLAGS) -c procesos.c
 

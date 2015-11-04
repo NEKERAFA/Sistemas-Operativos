@@ -14,13 +14,15 @@
 #include "utilidades.h"
 
 // Inserta un proceso en la lista de procesos
-insertarproceso(int pid, char * argv[], lista l) {
+void insertarproceso(int pid, char * argv[], lista l) {
    int * estado = (int *) malloc(sizeof(int));
    int prioridad;
    time_t tiempoactual = time(NULL);
    dato * proc;
-   char * comando;
-   int rwait = waitpid(pid, &estado, WNOHANG | WUNTRACED | WCONTINUED);
+   int tamcom = tamannotrozos(argv);
+   char * comando = (char *) malloc(tamcom*sizeof(char));
+   int rwait;
+   rwait = waitpid(pid, &estado, WNOHANG | WUNTRACED | WCONTINUED);
 
    juntarvector(comando, argv);
    if((pid != rwait) && (rwait != 0))
@@ -36,7 +38,7 @@ insertarproceso(int pid, char * argv[], lista l) {
 }
 
 // Actualiza un proceso de la lista de procesos
-actualizaproceso(posicion p, lista l) {
+void actualizaproceso(posicion p, lista l) {
    int * estado = (int *) malloc(sizeof(int));
    int waitpidresult;
    dato * proc = getDato(p, l);

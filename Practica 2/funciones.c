@@ -352,13 +352,13 @@ void segundoplanopri(){
 // Muestra el estado de un proceso
 void mostarestado(int estado) {
    if (WIFEXITED(estado))
-      printf("%8s %6i", "EXITED", WEXITSTATUS(estado));
+      printf("%8s %6i ", "EXITED", WEXITSTATUS(estado));
    else if (WIFSIGNALED(estado))
-      printf("%8s %6i", "SIGTERM", WTERMSIG(estado));
+      printf("%8s %6i ", "SIGTERM", WTERMSIG(estado));
    else if (WIFSTOPPED(estado))
-      printf("%8s %6i", "STOPPED", WSTOPSIG(estado));
+      printf("%8s %6i ", "STOPPED", WSTOPSIG(estado));
    else
-      printf("%8s %6s", "RUNNING", "");
+      printf("%8s %6s ", "RUNNING", "");
 }
 
 // Muestra el tiempo inicial
@@ -367,20 +367,21 @@ void tiempoinicio(time_t tiempo) {
    gmtime_r(&tiempo, stiempo);
    char * ctiempo = (char *) malloc(32*sizeof(char));
    strftime(ctiempo, 32*sizeof(char), "%h:%m", stiempo);
-   printf("%10s", ctiempo);
+   printf("%10s ", ctiempo);
    free(ctiempo);
    free(stiempo);
 }
 
 // Muestra la lista de procesos en segundo plano
-void jobs(lista l){
+void jobs(char * trozos[], lista l){
    posicion p = primera(l);
    dato * d;
 
    printf("%4s %4s %10s %8s %6s %s\n", "PID", "NICE", "TIME", "STATUS", "RETURN", "CMD");
    while(!esfindelista(p, l)) {
+      actualizaproceso(p, l);
       d = getDato(p, l);
-      printf("%4i %4i", d->pid, d->prio);
+      printf("%4i %4i ", d->pid, d->prio);
       tiempoinicio(d->hora_ini);
       mostarestado(d->status);
       printf("%s\n", d->comando);

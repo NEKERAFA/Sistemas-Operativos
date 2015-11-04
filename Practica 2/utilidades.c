@@ -10,19 +10,23 @@ int dividircadena(char * cadena, char * trozos[]) {
    return i;
 }
 
-// Junta trozos de un vector en una cadena
-int juntarvector(char * cadena, char * trozos[]) {
-   int i = 0;
+// Devuelve el tamaño de los trozos
+int tamannotrozos(char * trozos[]) {
    int tamanno = 0;
+   int i = 0;
    while (trozos[i] != NULL) {
       tamanno += strlen(trozos[i]); i++;
    }
 
-   cadena = (char *) malloc((tamanno+1)*sizeof(char));
+   return tamanno+1;
+}
 
-   i = 0;
+// Junta trozos de un vector en una cadena
+int juntarvector(char * cadena, char * trozos[]) {
+   int i = 1;
+   sprintf(cadena, "%s", trozos[0]);
    while (trozos[i] !=  NULL) {
-      sprintf(cadena, "%s", trozos[i]); i++;
+      sprintf(cadena, "%s%s", cadena, trozos[i]); i++;
    }
 
    return i;

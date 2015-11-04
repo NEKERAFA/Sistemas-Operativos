@@ -83,5 +83,7 @@ int main(int argc, char const *argv[]) {
       leerentrada(entrada, TAM_ENTRADA);
       procesarentrada(entrada, dir_act, procesoshijo, &fin);
    }
+
+   eliminarLista(&procesoshijo);
    return 0;
 }

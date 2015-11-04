@@ -3,15 +3,12 @@
 #include "lista.h"
 
 // Inserta un proceso en la lista de procesos
-insertarproceso( int pid, lista l );
+void insertarproceso( int pid, lista l );
 
 // Actualiza un proceso de la lista de procesos
-actualizaproceso( posicion p, lista l );
-
-// Elimina un proceso de la lista de procesos
-eliminaproceso( posicion p, lista l );
+void actualizaproceso( posicion p, lista l );
 
 // Mostrar proceso
-mostrarproceso( posicion p, lista l )
+void mostrarproceso( posicion p, lista l );
 
 #endif // _PROCESOS_H_
