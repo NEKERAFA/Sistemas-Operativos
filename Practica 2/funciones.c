@@ -335,18 +335,6 @@ void primerplanopri(int argc, char * argv[]) {
    }
 }
 
-void segundoplanopri(char * argv[]){
-   printf("Función no implementada todavía\n");
-}
-
-//Limpia los procesos terminados
-void clearjobs(char * argv[]){
-   //Algoritmo:
-   //Se actualiza la lista de procesos
-   //se recorre la lista y se eliminan todos aquellos cuyo estado sea term o sign
-}
-
-
 // Crea un proceso en segundo plano
 void segundoplano(char * argv[], lista l) {
    int pid;
@@ -386,17 +374,21 @@ void tiempoinicio(time_t tiempo) {
 
 // Muestra la lista de procesos en segundo plano
 void jobs(lista l){
-   if(!esListaVacia(l)) {
-      posicion p = primera(l);
-      dato * d;
+   posicion p = primera(l);
+   dato * d;
 
-      printf("%4s %4s %10s %8s %6s %s\n", "PID", "NICE", "TIME", "STATUS", "RETURN", "CMD");
-      while(!esfindelista(p, l)) {
-         d = getDato(p, l);
-         printf("%4i %4i", d->pid, d->prio);
-         tiempoinicio(d->hora_ini);
-         mostarestado(d->status);
-         printf("%s\n", d->comando);
-         p = siguiente(p, l);
-      }
+   printf("%4s %4s %10s %8s %6s %s\n", "PID", "NICE", "TIME", "STATUS", "RETURN", "CMD");
+   while(!esfindelista(p, l)) {
+      d = getDato(p, l);
+      printf("%4i %4i", d->pid, d->prio);
+      tiempoinicio(d->hora_ini);
+      mostarestado(d->status);
+      printf("%s\n", d->comando);
+      p = siguiente(p, l);
+   }
+}
+
+// Limpia los procesos
+void clearjobs(){
+   printf("Función no implementada todavía\n");
 }
