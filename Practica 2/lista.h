@@ -4,7 +4,8 @@
    struct dato {
       int pid;
       int prio;
-      int status;
+      char * status;
+      int retorno;
       time_t hora_ini;
       char * comando;
    };
@@ -23,18 +24,23 @@
 
    //Cabeceras de funciones
    lista crearlista();
+
    int esListaVacia(lista l);
+   int esfindelista(posicion p, lista l);
+   
    posicion primera(lista l);
    posicion ultima(lista l);
    posicion anterior(posicion p, lista l);
    posicion siguiente(posicion p, lista l);
-   int esfindelista(posicion p, lista l);
-   dato* getDato(posicion p, lista l);
    posicion buscarDato(int pid, lista l);
+   
    int insertar(dato *d, lista l);
    void eliminar(posicion p, lista l);
    void actualizarDato(dato *d, posicion p,lista l);
+   
    void eliminarLista(lista *l);
-   dato* nuevodato(int pid, int prio, int status, time_t hora_ini, char * comando);
+
+   dato* nuevodato(int pid, int prio, char * status, time_t hora_ini, char * comando,int retorno);
+   dato* getDato(posicion p, lista l);
    void eliminardato(dato *d);
 #endif

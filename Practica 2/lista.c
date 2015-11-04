@@ -27,7 +27,7 @@
    lista crearlista(){
 
       nodo *l = crearnodo();
-      l->sig = l;
+      l->sig = NULL;
       l->ant = l;
 
       return l;
@@ -56,12 +56,7 @@
    }
 
    posicion siguiente (posicion p,lista l){
-
-      if (p->sig == l){
-         return NULL;
-      } else {
-         return p->sig;
-      }
+     return p->sig;
    }
 
    int esfindelista(posicion p, lista l){
@@ -102,6 +97,8 @@
       posicion tmp = p;
       tmp->ant->sig =tmp->sig;
       if(p != ultima(l)) tmp->sig->ant =tmp->ant;
+      else l->ant = tmp->ant;
+      eliminardato(tmp->dato);
       free(tmp);
    }
 
@@ -117,7 +114,7 @@
       *l=NULL;
    }
 
-   dato* nuevodato(int pid, int prio, int status, time_t hora_ini, char * comando){
+   dato* nuevodato(int pid, int prio, char * status, time_t hora_ini, char * comando,int retorno){
       dato * d = creardato();
 
       d->pid = pid;
@@ -125,11 +122,13 @@
       d->status = status;
       d->hora_ini = hora_ini;
       d->comando = comando;
+      d->retorno = retorno;
 
       return d;
    }
 
    void eliminardato(dato *d){
       free (d->comando);
+      free (d->status);
       free (d);
    }

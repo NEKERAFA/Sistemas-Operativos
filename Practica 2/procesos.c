@@ -17,9 +17,11 @@
 
 // Inserta un proceso en la lista de procesos
 void insertarproceso(int pid, char * argv[], lista l) {
+   char * status = (char *) malloc (6 *sizeof(char));
    int estado;
    int prioridad;
    int waitpidresult;
+   int retorno = 0;
    time_t tiempoactual = time(NULL);
    dato * proc;
    int tamcom = tamannotrozos(argv);
@@ -32,7 +34,8 @@ void insertarproceso(int pid, char * argv[], lista l) {
    else if ((prioridad = getpriority(PRIO_PROCESS, pid)) == -1)
          perror("No se puede obtener la prioridad del proceso");
       else {
-         proc = nuevodato(pid, prioridad, estado, tiempoactual, comando);
+         sprintf(status,"act");
+         proc = nuevodato(pid, prioridad, status, tiempoactual, comando,retorno);
          insertar(proc, l);
       }
 }
