@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/resource.h>
@@ -12,6 +13,7 @@
 #include <fcntl.h>
 #include "funciones.h"
 #include "lista.h"
+#include "procesos.h"
 
 // Muestra en pantalla el pid actual o el pid padre
 void pid(char * parametro) {
@@ -180,11 +182,9 @@ void printslnk(char * path) {
 // Lista un directorio
 void listdir( int argc, char * argv[] ) {
    int flags;
-   int df;
    char * dir_path = ".";
    DIR * pdir;
    struct dirent * sdir;
-   int i;
 
    if ((flags = getarg(argc, argv, &dir_path)) != -1) {
       if ((pdir = opendir(dir_path)) == NULL) {
@@ -276,7 +276,6 @@ void getprioridad(char * parametro) {
 
 // Establece la prioridad
 void setprioridad(int argc, char * argv[]) {
-   int prioridad;
    if (argc < 2) getprioridad(argv[0]);
    else if (argc == 2) {
       if(setpriority(PRIO_PROCESS, atoi(argv[0]), atoi(argv[1])) == -1)
@@ -290,7 +289,9 @@ void setprioridad(int argc, char * argv[]) {
 // Crea un hijo y espera a que el hijo termine
 void dofork() {
    int pid;
-   if((pid = fork()) != 0) waitpid(pid, NULL, 0);
+   if((pid = fork()) != 0){ 
+      waitpid(pid, NULL, 0);
+   }
 }
 
 // Ejecuta un programa sin crear un proceso nuevo

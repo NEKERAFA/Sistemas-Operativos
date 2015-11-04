@@ -83,26 +83,29 @@
 
    int insertar (dato *d, lista l){
       nodo *tmp = crearnodo();
-      posicion p = ultima(l);
+      if (tmp != NULL){
+         posicion p = ultima(l);
 
-      tmp->dato = d;
-      tmp->ant= p;
-      tmp->sig=l;
+         tmp->dato = d;
+         tmp->ant= p;
+         tmp->sig=l;
 
-      l->ant = tmp;
-      p->sig = tmp;
-
+         l->ant = tmp;
+         p->sig = tmp;
+         return 0;
+      } else {
+         return -1;
+      }
    }
 
-   int eliminar (posicion p, lista l){
+   void eliminar (posicion p, lista l){
       posicion tmp = p;
       tmp->ant->sig =tmp->sig;
       tmp->sig->ant =tmp->ant;
-      eliminardato((l->dato));
       free(tmp);
    }
 
-   int actualizarDato (dato *d, posicion p, lista l){
+   void actualizarDato (dato *d, posicion p, lista l){
       dato *tmp = p->dato;
       p->dato = d;
       free(tmp);
@@ -128,7 +131,7 @@
       return d;
    }
 
-   int eliminardato(dato *d){
+   void eliminardato(dato *d){
       free (d->comando);
       free (d);
    }

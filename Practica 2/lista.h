@@ -32,9 +32,9 @@
    dato* getDato(posicion p, lista l);
    posicion buscarDato(int pid, lista l);
    int insertar(dato *d, lista l);
-   int eliminar(posicion p, lista l);
-   int actualizarDato(dato *d, posicion p,lista l);
+   void eliminar(posicion p, lista l);
+   void actualizarDato(dato *d, posicion p,lista l);
    void eliminarLista(lista *l);
    dato* nuevodato(int pid, int prio, int status, time_t hora_ini, char * comando);
-   int eliminardato(dato *d);
+   void eliminardato(dato *d);
 #endif

@@ -3,7 +3,7 @@
 #include "lista.h"
 
 // Inserta un proceso en la lista de procesos
-void insertarproceso( int pid, lista l );
+void insertarproceso( int pid,char * argv[], lista l );
 
 // Actualiza un proceso de la lista de procesos
 void actualizaproceso( posicion p, lista l );
