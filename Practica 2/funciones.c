@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+#include <limits.h>
 #include <time.h>
 #include <sys/wait.h>
 #include <sys/types.h>
@@ -345,12 +347,21 @@ void segundoplano(char * argv[], lista l) {
 }
 
 // Crea un proceso en segundo plano con prioridad
-void segundoplanopri(){
-   printf("Función no implementada todavía\n");
+void segundoplanopri(int argc, char *argv[],lista l){
+   int pid;
+
+   if(argc < 2)
+      printf("Uso: splanopri [prioridad] [programa]: Ejecuta un programa en segundo plano una prioridad\n");
+   else {
+      if((pid = vfork()) == 0) {
+         if (setpriority(PRIO_PROCESS, 0, atoi(argv[0])) == -1)
+            perror("Error al establecer la prioridad");
+         else execprog(argv+1);
+      } else insertarproceso(pid, argv, l);
+   }
 }
 
-// Muestra la lista de procesos en segundo plano
-void jobs(char * trozos[], lista l){
+void jobs_all(lista l){
    if(!esListaVacia(l)){
       dato * d;
       posicion p = primera(l);
@@ -366,6 +377,69 @@ void jobs(char * trozos[], lista l){
    }
 }
 
+void jobs_filtrado (char *selector,lista l){
+   int boolean = 1;
+
+   if(!esListaVacia(l)){
+      dato * d;
+      posicion p = primera(l);
+      printf("%4s %4s %10s %6s %6s %s\n", "PID", "NICE", "TIME", "STATUS", "RETURN", "CMD");
+      while((p != NULL)&&(!esfindelista(p, l)||(p == ultima (l)))) {
+         actualizaproceso(p, l);
+         d = getDato(p, l);
+         if(!strcmp(selector,d->status)){
+            mostrarproceso(d, l);   
+            boolean = 0;
+         }
+         p = siguiente(p, l);
+      }
+   } 
+
+   if (boolean){
+      printf("No hay procesos que mostrar\n");
+   }
+}
+
+void jobs_pid(int pid, lista l){
+   posicion p;
+   dato * d;
+
+   if(!esListaVacia(l)){
+      if((p=buscarDato(pid,l))==NULL){
+         printf("No se ha encontrado el proceso solicitado\n");
+      } else {
+         actualizaproceso(p, l);
+         d = getDato(p, l);
+         mostrarproceso(d, l);
+      }
+   }else{
+      printf("No hay procesos que mostrar\n");
+   }
+}
+
+// Muestra la lista de procesos en segundo plano
+void jobs(int n,char * trozos[], lista l){
+   int pid;
+
+   if (n==0){
+      jobs_all(l);
+   } else if(!strcmp(trozos[0],"all")){
+      jobs_all(l);
+   } else if(!strcmp(trozos[0],"term")){
+      jobs_filtrado(EXIT,l);
+   } else if(!strcmp(trozos[0],"sig")){
+      jobs_filtrado(SIGN,l);
+   } else if (!strcmp(trozos[0],"stop")){
+      jobs_filtrado(STOP,l);
+   } else if(!strcmp(trozos[0],"act")){
+      jobs_filtrado(ACT,l);
+   } else if(((pid = atoi(trozos[0]))>0)&&(pid<INT_MAX)){
+      jobs_pid(pid,l);
+   } else {
+      printf("Uso: jobs [parametro] [pid]: muestra el estado de procesos en segundo plano o el estado de uno con un pid concreto");
+   }
+}
+
 // Limpia los procesos
 void clearjobs(lista l){
    dato *d;
@@ -376,7 +450,7 @@ void clearjobs(lista l){
          tmp = siguiente(p,l);
          actualizaproceso(p, l);
          d = getDato(p, l);
-         if(strcmp(d->status,SIGN)||strcmp(d->status,EXIT)){
+         if(!strcmp(d->status,SIGN)||!strcmp(d->status,EXIT)){
             eliminar(p,l);
          }
          p = tmp;

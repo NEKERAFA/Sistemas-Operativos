@@ -56,8 +56,10 @@ void procesarentrada(char * entrada, char * dir_act, lista l, int * salir) {
          primerplanopri(n_parametros-1, c_parametros+1);
       } else if (!strcmp(c_parametros[0], "splano")) {
          segundoplano(c_parametros+1, l);
+      } else if (!strcmp(c_parametros[0], "splanopri")) {
+         segundoplanopri(n_parametros-1, c_parametros+1,l);
       } else if (!strcmp(c_parametros[0], "jobs")) {
-         jobs(c_parametros+1, l);
+         jobs(n_parametros-1,c_parametros+1, l);
       } else if (!strcmp(c_parametros[0], "clearjobs")) {
          clearjobs(l);
       } else {

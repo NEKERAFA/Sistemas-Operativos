@@ -1,6 +1,8 @@
 #ifndef _FUNCIONES_H_
 #define _FUNCIONES_H_
 
+#include "lista.h"
+
 enum {HIDDEN_FILES = 1 << 0, SHORT_NAME = 1 << 1};
 
 // Muestra en pantalla el pid actual o el pid padre
@@ -42,12 +44,16 @@ void primerplano( char * argv[] );
 // Crea un proceso en primer plano con prioridad
 void primerplanopri( int argc, char * argv[] );
 
-void segundoplano();
+// Crea un proceso en segundo plano
+void segundoplano(char * argv[], lista l);
 
-void segundoplanopri();
+//Crea un proceso en segundo plano con prioridad
+void segundoplanopri(int argc, char *argv[],lista l);
 
-void jobs();
+//Muestra los procesos en segundo plano de la terminal
+void jobs(int n,char * trozos[], lista l);
 
-void clearjobs();
+//Borra de la lista de procesos en segundo plano todos aquellos que han terminado
+void clearjobs(lista l);
 
 #endif // _FUNCIONES_H_
