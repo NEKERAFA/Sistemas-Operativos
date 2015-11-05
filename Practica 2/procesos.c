@@ -15,19 +15,12 @@
 #include "procesos.h"
 #include "utilidades.h"
 
-#define ACT  "ACT"
-#define CONT "CONT"
-#define EXIT "EXIT"
-#define SIGN "SIGN"
-#define STOP "STOP"
-#define UNK  "UNK"
-
 // Muestra el tiempo inicial
 void tiempoinicio(time_t tiempo) {
    struct tm * stiempo = (struct tm *) malloc(sizeof(struct tm));
-   gmtime_r(&tiempo, stiempo);
-   char * ctiempo = (char *) malloc(32*sizeof(char));
-   strftime(ctiempo, 32*sizeof(char), "%H:%M:%S", stiempo);
+   localtime_r(&tiempo, stiempo);
+   char * ctiempo = (char *) malloc(9*sizeof(char));
+   strftime(ctiempo, 9*sizeof(char), "%T", stiempo);
    printf("%10s ", ctiempo);
    free(ctiempo);
    free(stiempo);

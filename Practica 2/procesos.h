@@ -2,6 +2,12 @@
 #define _PROCESOS_H_
 #include "lista.h"
 
+#define ACT  "ACT"
+#define CONT "CONT"
+#define EXIT "EXIT"
+#define SIGN "SIGN"
+#define STOP "STOP"
+
 // Inserta un proceso en la lista de procesos
 void insertarproceso(int pid, char * argv[], lista l);
 
