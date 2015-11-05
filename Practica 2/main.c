@@ -58,6 +58,8 @@ void procesarentrada(char * entrada, char * dir_act, lista l, int * salir) {
          segundoplano(c_parametros+1, l);
       } else if (!strcmp(c_parametros[0], "jobs")) {
          jobs(c_parametros+1, l);
+      } else if (!strcmp(c_parametros[0], "clearjobs")) {
+         clearjobs(l);
       } else {
          primerplano(c_parametros);
       }

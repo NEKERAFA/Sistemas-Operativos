@@ -356,15 +356,30 @@ void jobs(char * trozos[], lista l){
       posicion p = primera(l);
       printf("%4s %4s %10s %6s %6s %s\n", "PID", "NICE", "TIME", "STATUS", "RETURN", "CMD");
       while((p != NULL)&&(!esfindelista(p, l)||(p == ultima (l)))) {
-         d = getDato(p, l);
          actualizaproceso(p, l);
+         d = getDato(p, l);
          mostrarproceso(d, l);
          p = siguiente(p, l);
       }
+   } else {
+      printf("No hay procesos en segundo plano\n");
    }
 }
 
 // Limpia los procesos
-void clearjobs(){
-   printf("Función no implementada todavía\n");
+void clearjobs(lista l){
+   dato *d;
+   posicion tmp;
+   if(!esListaVacia(l)){
+      posicion p = primera(l);
+      while ((p != NULL)&&(!esfindelista(p, l)||(p == ultima (l)))){
+         tmp = siguiente(p,l);
+         actualizaproceso(p, l);
+         d = getDato(p, l);
+         if(strcmp(d->status,SIGN)||strcmp(d->status,EXIT)){
+            eliminar(p,l);
+         }
+         p = tmp;
+      }
+   }
 }

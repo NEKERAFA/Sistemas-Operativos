@@ -130,6 +130,5 @@
 
    void eliminardato(dato *d){
       free (d->comando);
-      free (d->status);
       free (d);
    }

@@ -60,40 +60,22 @@ int retornoproceso(int estado) {
 
 // Inserta un proceso en la lista de procesos
 void insertarproceso(int pid, char * argv[], lista l) {
-<<<<<<< HEAD
-   char * status = (char *) malloc (6 *sizeof(char));
-   int estado;
+
    int prioridad;
-   int waitpidresult;
-   int retorno = 0;
-=======
-   int prioridad;
->>>>>>> f0a33c5cc4774c1aee73b1b7976eb3362700214a
    time_t tiempoactual = time(NULL);
    dato * proc;
    int tamcom = tamannotrozos(argv);
    char * comando = (char *) malloc(tamcom*sizeof(char));
 
    juntarvector(comando, argv);
-<<<<<<< HEAD
-   waitpidresult = waitpid(pid, &estado, WNOHANG | WUNTRACED | WCONTINUED);
-   if(pid != waitpidresult)
-      printf("No se puede obtener el estado del proceso %i %i", pid, waitpidresult);
-   else if ((prioridad = getpriority(PRIO_PROCESS, pid)) == -1)
-         perror("No se puede obtener la prioridad del proceso");
-      else {
-         sprintf(status,"act");
-         proc = nuevodato(pid, prioridad, status, tiempoactual, comando,retorno);
-         insertar(proc, l);
-      }
-=======
+
    if ((prioridad = getpriority(PRIO_PROCESS, pid)) == -1)
       perror("No se puede obtener la prioridad del proceso");
    else {
       proc = nuevodato(pid, prioridad, ACT, 0, tiempoactual, comando);
       insertar(proc, l);
    }
->>>>>>> f0a33c5cc4774c1aee73b1b7976eb3362700214a
+
 }
 
 // Actualiza un proceso de la lista de procesos
