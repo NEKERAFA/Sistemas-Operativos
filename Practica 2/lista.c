@@ -5,11 +5,6 @@
    static nodo *crearnodo(){
 
       nodo *tmp = malloc (sizeof(nodo));
-      if (tmp == NULL){
-         printf("Memoria agotada\n");
-         exit(EXIT_FAILURE);
-      }
-
       return tmp;
    }
 
@@ -25,11 +20,12 @@
    }
 
    lista crearlista(){
-
       nodo *l = crearnodo();
-      l->sig = NULL;
-      l->ant = l;
-
+      
+      if (l != NULL){
+         l->sig = NULL;
+         l->ant = l;
+      }
       return l;
    }
 
@@ -60,6 +56,7 @@
    }
 
    int esfindelista(posicion p, lista l){
+      if (p == NULL) return -1;
       return (p->sig == NULL);
    }
 
