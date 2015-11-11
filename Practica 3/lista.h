@@ -10,10 +10,10 @@
       char * comando;
    };
 
-   typedef void * dato;
+   typedef struct dato dato;
 
    struct nodo {
-      dato *dato;
+      dato * dato;
       struct nodo *sig;
       struct nodo *ant;
    };

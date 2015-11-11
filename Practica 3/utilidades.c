@@ -26,7 +26,7 @@ int juntarvector(char * cadena, char * trozos[]) {
    int i = 1;
    sprintf(cadena, "%s", trozos[0]);
    while (trozos[i] !=  NULL) {
-      sprintf(cadena, "%s%s", cadena, trozos[i]); i++;
+      sprintf(cadena, "%s %s", cadena, trozos[i]); i++;
    }
 
    return i;

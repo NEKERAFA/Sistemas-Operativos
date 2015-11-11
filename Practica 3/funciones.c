@@ -301,7 +301,7 @@ void dofork() {
    }
 }
 
-// Ejecuta un programa sin crear un procaitpidresulteso nuevo
+// Ejecuta un programa sin crear un proceso nuevo
 void execprog(char * argv[]) {
    if(argv[0] == NULL) printf("exec: Se necesita un argumento mínimo\n");
    else
@@ -363,8 +363,8 @@ void segundoplanopri(int argc, char *argv[],lista l){
          if (setpriority(PRIO_PROCESS, 0, atoi(argv[0])) == -1)
             perror("Error al establecer la prioridad");
          else execprog(argv+1);
-      } else insertarproceso(pid, argv, l);
-   }aitpidresult
+      } else insertarproceso(pid, argv+1, l); 
+   }
 }
 
 void jobs_all(lista l){
