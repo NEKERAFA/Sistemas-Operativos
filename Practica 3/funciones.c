@@ -26,9 +26,15 @@ void pid(char * parametro) {
 
 // Muestra los autores
 void author() {
-   printf("Este shell ha sido realizado por: \n");
-   printf("Rafael Alcalde Azpiazu (rafael.alcalde.azpizu@udc.es) \n");
-   printf("Ivan Anta Porto (i.anta@udc.es)\n");
+
+   printf("|-----------------------------------------------------------------|\n");
+   printf("|                                                                 |\n");
+   printf("|              Este shell ha sido realizado por:                  |\n");
+   printf("|                                                                 |\n");
+   printf("|     Rafael Alcalde Azpiazu (rafael.alcalde.azpizu@udc.es)       |\n");
+   printf("|              Ivan Anta Porto (i.anta@udc.es)                    |\n");
+   printf("|                                                                 |\n");   
+   printf("|-----------------------------------------------------------------|\n");
 
 }
 
@@ -295,7 +301,7 @@ void dofork() {
    }
 }
 
-// Ejecuta un programa sin crear un proceso nuevo
+// Ejecuta un programa sin crear un procaitpidresulteso nuevo
 void execprog(char * argv[]) {
    if(argv[0] == NULL) printf("exec: Se necesita un argumento mínimo\n");
    else
@@ -358,7 +364,7 @@ void segundoplanopri(int argc, char *argv[],lista l){
             perror("Error al establecer la prioridad");
          else execprog(argv+1);
       } else insertarproceso(pid, argv, l);
-   }
+   }aitpidresult
 }
 
 void jobs_all(lista l){
