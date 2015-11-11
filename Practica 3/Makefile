@@ -39,12 +39,6 @@ proceso: lista utilidades
 	echo -e '\e[32mCompilando modulo proceso\e[0m'
 	$(CC) $(CFLAGS) -c procesos.c
 
-gdb:
-	echo -e '\e[32mCompilando en modo debug...\e[0m'
-	$(CC) -g -O0 $(OBJ_MAIN) -o $(OBJ_SHELL)
-	$(CC) -g -O0 listar.c funciones.c -o $(OBJ_LISTAR)
-	$(CC) -g -O0 deltree.c funciones.c -o $(OBJ_DELTR)
-
 clean:
 	echo -e '\e[32mLimpiando...\e[0m'
 	rm -f *.o $(OBJ_SHELL) $(OBJ_LISTAR) $(OBJ_DELTR)
