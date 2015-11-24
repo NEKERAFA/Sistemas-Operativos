@@ -17,6 +17,8 @@
 #include "lista.h"
 #include "procesos.h"
 
+#define min(a, b) ((a<b) ? (a) : (b))
+
 // Muestra en pantalla el pid actual o el pid padre
 void pid(char * parametro) {
    if (parametro == NULL) { printf("Pid actual: %d\n", getpid()); }
@@ -33,7 +35,7 @@ void author() {
    printf("|                                                                 |\n");
    printf("|     Rafael Alcalde Azpiazu (rafael.alcalde.azpizu@udc.es)       |\n");
    printf("|              Ivan Anta Porto (i.anta@udc.es)                    |\n");
-   printf("|                                                                 |\n");   
+   printf("|                                                                 |\n");
    printf("|-----------------------------------------------------------------|\n");
 
 }
@@ -363,7 +365,7 @@ void segundoplanopri(int argc, char *argv[],lista l){
          if (setpriority(PRIO_PROCESS, 0, atoi(argv[0])) == -1)
             perror("Error al establecer la prioridad");
          else execprog(argv+1);
-      } else insertarproceso(pid, argv+1, l); 
+      } else insertarproceso(pid, argv+1, l);
    }
 }
 
@@ -394,12 +396,12 @@ void jobs_filtrado (char *selector,lista l){
          actualizaproceso(p, l);
          d = getDato(p, l);
          if(!strcmp(selector,d->status)){
-            mostrarproceso(d, l);   
+            mostrarproceso(d, l);
             boolean = 0;
          }
          p = siguiente(p, l);
       }
-   } 
+   }
 
    if (boolean){
       printf("No hay procesos que mostrar\n");
@@ -462,4 +464,57 @@ void clearjobs(lista l){
          p = tmp;
       }
    }
+}
+
+// Función recursiva
+void recursiva(int n) {
+   char automatico[512];
+   static char estatico[512];
+
+   printf("Parametro n = %d en %p\n", n, &n);
+   printf("Array estatico en %p\n", estatico);
+   printf("Array automatico en %p\n", automatico);
+
+   if (n>0) recursiva(n-1);
+}
+
+// Imprime el contenido de Memoria
+void memdump(char* dir, char* count) {
+   void *p; int i = 0; int j, max;
+   p = atoi(dir);
+   if (count == NULL) max = 25; else max = atoi(count);
+
+   while (i<max) {
+      for(j = i; j < min(i+25, max); j++) printf("%2c ", *((char *) (p+j)));
+      printf("\n");
+      for(j = i; j < min(i+25, max); j++) printf("%2x ", *((int *) (p+j)));
+      printf("\n");
+      i += 25;
+   }
+}
+
+// Muestra las credenciales
+void MostrarCredenciales() {
+   uid_t u = getuid();
+   uid_t ue = geteuid();
+
+   printf("Credencial real: %i\nCredencial efectiva: %i\n", u, ue);
+}
+
+// Cambia las credenciales
+void changeuid(char * argv[]) {
+   struct passwd *p;
+   uid_t u;
+   char mensaje [1024];
+
+   if (argv[0]==NULL) { MostrarCredenciales(); return; }
+   if (argv[1]!=NULL && strcmp(argv[0], "-l")) { printf ("uid [-l] uid\n"); return; }
+   if (argv[1]==NULL)
+      u=atoi(argv[0]); /*no hay primer parametro*/
+   else if ((p=getpwnam(argv[1]))!=NULL) u=p->pw_uid;
+      else { printf ("Imposible obtener informacion de login %s\n",argv[1]); return; }
+   if (setuid(u)==-1) {
+      sprintf(mensaje, "Error al intentar establecer la credencial %d", u);
+      uidperror(mensaje);
+   } else printf("Credencial cambiada a %d\n", u);
 }

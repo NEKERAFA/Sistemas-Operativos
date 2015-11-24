@@ -56,4 +56,13 @@ void jobs(int n,char * trozos[], lista l);
 //Borra de la lista de procesos en segundo plano todos aquellos que han terminado
 void clearjobs(lista l);
 
+// Función recursiva
+void recursiva(int n);
+
+// Imprime el contenido de Memoria
+void memdump(char* dir, char* count);
+
+// Miestra las credenciales
+void changeuid(char * argv[]);
+
 #endif // _FUNCIONES_H_

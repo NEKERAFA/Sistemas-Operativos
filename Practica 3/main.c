@@ -63,6 +63,12 @@ void procesarentrada(char * entrada, char * dir_act, lista l, int * salir) {
          jobs(n_parametros-1,c_parametros+1, l);
       } else if (!strcmp(c_parametros[0], "clearjobs")) {
          clearjobs(l);
+      } else if (!strcmp(c_parametros[0], "memdump")) {
+         memdump(c_parametros[1], c_parametros[2]);
+      } else if (!strcmp(c_parametros[0], "uid")) {
+         changeuid(c_parametros+1);
+      } else if (!strcmp(c_parametros[0], "recursiva")) {
+         recursiva(atoi(c_parametros[1]));
       } else {
          primerplano(c_parametros);
       }
