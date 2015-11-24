@@ -8,17 +8,6 @@
       return tmp;
    }
 
-   static dato *creardato(){
-      dato *tmp = malloc (sizeof(dato));
-
-      if (tmp == NULL){
-         printf("Memoria agotada \n");
-         exit(EXIT_FAILURE);
-      }
-
-      return tmp;
-   }
-
    lista crearlista(){
       nodo *l = crearnodo();
       
@@ -60,20 +49,11 @@
       return (p->sig == NULL);
    }
 
-   dato* getDato (posicion p,lista l){
+   void * getDato (posicion p,lista l){
       return p->dato;
    }
 
-   posicion buscarDato(int pid, lista l) {
-      if (esListaVacia(l)) return NULL;
-      posicion p = primera(l);
-
-      while (!esfindelista(p, l) && p->dato->pid != pid) siguiente(p, l);
-      if (p->dato->pid == pid) return p;
-      return NULL;
-   }
-
-   int insertar (dato *d, lista l){
+   int insertar (void *d, lista l){
       nodo *tmp = crearnodo();
       if (tmp != NULL){
          posicion p = ultima(l);
@@ -90,7 +70,7 @@
       }
    }
 
-   void eliminar (posicion p, lista l){
+   void eliminar (void (*eliminardato)(void * dato),posicion p, lista l){
       posicion tmp = p;
       tmp->ant->sig =tmp->sig;
       if(p != ultima(l)) tmp->sig->ant =tmp->ant;
@@ -99,33 +79,14 @@
       free(tmp);
    }
 
-   void actualizarDato (dato *d, posicion p, lista l){
+   void actualizarDato (void *d, posicion p, lista l){
       p->dato = d;
    }
 
-   void eliminarLista(lista *l){
+   void eliminarLista(void (*eliminardato)(void * dato),lista *l){
       while(!esListaVacia(*l)){
-         eliminar(primera(*l),*l);
+         eliminar(eliminardato,primera(*l),*l);
       }
       free(*l);
       *l=NULL;
-   }
-
-   dato* nuevodato(int pid, int prio, char * status, int retorno, time_t hora_ini, char * comando){
-      dato * d = creardato();
-
-      d->pid = pid;
-      d->prio = prio;
-      d->status = status;
-      d->retorno = retorno;
-      d->hora_ini = hora_ini;
-      d->comando = comando;
-      d->retorno = retorno;
-
-      return d;
-   }
-
-   void eliminardato(dato *d){
-      free (d->comando);
-      free (d);
    }

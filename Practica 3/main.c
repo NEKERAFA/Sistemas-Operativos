@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "funciones.h"
+#include "procesos.h"
 #include "utilidades.h"
 #include "lista.h"
 
@@ -88,6 +89,6 @@ int main(int argc, char const *argv[]) {
       procesarentrada(entrada, dir_act, procesoshijo, &fin);
    }
 
-   eliminarLista(&procesoshijo);
+   eliminarLista(&eliminardatoproc,&procesoshijo);
    return 0;
 }

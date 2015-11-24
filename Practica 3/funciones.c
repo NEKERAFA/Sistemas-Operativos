@@ -369,7 +369,7 @@ void segundoplanopri(int argc, char *argv[],lista l){
 
 void jobs_all(lista l){
    if(!esListaVacia(l)){
-      dato * d;
+      datoproc * d;
       posicion p = primera(l);
       printf("%4s %4s %10s %6s %6s %s\n", "PID", "NICE", "TIME", "STATUS", "RETURN", "CMD");
       while((p != NULL)&&(!esfindelista(p, l)||(p == ultima (l)))) {
@@ -387,7 +387,7 @@ void jobs_filtrado (char *selector,lista l){
    int boolean = 1;
 
    if(!esListaVacia(l)){
-      dato * d;
+      datoproc * d;
       posicion p = primera(l);
       printf("%4s %4s %10s %6s %6s %s\n", "PID", "NICE", "TIME", "STATUS", "RETURN", "CMD");
       while((p != NULL)&&(!esfindelista(p, l)||(p == ultima (l)))) {
@@ -408,7 +408,7 @@ void jobs_filtrado (char *selector,lista l){
 
 void jobs_pid(int pid, lista l){
    posicion p;
-   dato * d;
+   datoproc * d;
 
    if(!esListaVacia(l)){
       if((p=buscarDato(pid,l))==NULL){
@@ -448,7 +448,7 @@ void jobs(int n,char * trozos[], lista l){
 
 // Limpia los procesos
 void clearjobs(lista l){
-   dato *d;
+   datoproc *d;
    posicion tmp;
    if(!esListaVacia(l)){
       posicion p = primera(l);
@@ -457,7 +457,7 @@ void clearjobs(lista l){
          actualizaproceso(p, l);
          d = getDato(p, l);
          if(!strcmp(d->status,SIGN)||!strcmp(d->status,EXIT)){
-            eliminar(p,l);
+            eliminar(&eliminardatoproc,p,l);
          }
          p = tmp;
       }

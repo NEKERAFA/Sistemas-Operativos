@@ -15,6 +15,51 @@
 #include "procesos.h"
 #include "utilidades.h"
 
+static datoproc *creardato(){
+   datoproc *tmp = malloc (sizeof(datoproc));
+
+   if (tmp == NULL){
+      printf("Memoria agotada \n");
+      exit(EXIT_FAILURE);
+   }
+
+   return tmp;
+}
+
+datoproc* nuevodato(int pid, int prio, char * status, int retorno, time_t hora_ini, char * comando){
+      datoproc * d = creardato();
+
+      d->pid = pid;
+      d->prio = prio;
+      d->status = status;
+      d->retorno = retorno;
+      d->hora_ini = hora_ini;
+      d->comando = comando;
+      d->retorno = retorno;
+
+      return d;
+   }
+
+void eliminardatoproc(datoproc *d){
+      free (d->comando);
+      free (d);
+   }
+   
+posicion buscarDato(int pid, lista l) {
+   datoproc * aux;
+
+   if (esListaVacia(l)) return NULL;
+   posicion p = primera(l);
+
+   aux = getDato(p,l);
+
+   while (!esfindelista(p, l) && aux->pid != pid){
+      aux = getDato(p,l);
+      siguiente(p, l); 
+   } 
+   if (aux->pid == pid) return p;
+   return NULL;
+}
 // Muestra el tiempo inicial
 void tiempoinicio(time_t tiempo) {
    struct tm * stiempo = (struct tm *) malloc(sizeof(struct tm));
@@ -56,7 +101,7 @@ void insertarproceso(int pid, char * argv[], lista l) {
 
    int prioridad;
    time_t tiempoactual = time(NULL);
-   dato * proc;
+   datoproc * proc;
    int tamcom = tamannotrozos(argv);
    char * comando = (char *) malloc(tamcom*sizeof(char));
 
@@ -76,7 +121,7 @@ void actualizaproceso(posicion p, lista l) {
    int estado;
    int prior;
    int waitpidresult;
-   dato * proc = getDato(p, l);
+   datoproc * proc = getDato(p, l);
 
    waitpidresult = waitpid(proc->pid, &estado, WNOHANG | WUNTRACED | WCONTINUED);
    if(proc->pid == waitpidresult) {
@@ -89,7 +134,7 @@ void actualizaproceso(posicion p, lista l) {
 }
 
 // Mostrar proceso
-void mostrarproceso(dato * d, lista l) {
+void mostrarproceso(datoproc * d, lista l) {
    printf("%4i %4i ", d->pid, d->prio);
    tiempoinicio(d->hora_ini);
    printf("%6s %6i ", d->status, d->retorno);
