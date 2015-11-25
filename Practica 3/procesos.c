@@ -15,7 +15,7 @@
 #include "procesos.h"
 #include "utilidades.h"
 
-static datoproc *creardato(){
+static datoproc *creardatop(){
    datoproc *tmp = malloc (sizeof(datoproc));
 
    if (tmp == NULL){
@@ -26,8 +26,8 @@ static datoproc *creardato(){
    return tmp;
 }
 
-datoproc* nuevodato(int pid, int prio, char * status, int retorno, time_t hora_ini, char * comando){
-      datoproc * d = creardato();
+datoproc* nuevodatop(int pid, int prio, char * status, int retorno, time_t hora_ini, char * comando){
+      datoproc * d = creardatop();
 
       d->pid = pid;
       d->prio = prio;
@@ -40,12 +40,12 @@ datoproc* nuevodato(int pid, int prio, char * status, int retorno, time_t hora_i
       return d;
    }
 
-void eliminardatoproc(datoproc *d){
+void eliminardatop(datoproc *d){
       free (d->comando);
       free (d);
    }
-   
-posicion buscarDato(int pid, lista l) {
+
+posicion buscardatop(int pid, lista l) {
    datoproc * aux;
 
    if (esListaVacia(l)) return NULL;
@@ -55,8 +55,8 @@ posicion buscarDato(int pid, lista l) {
 
    while (!esfindelista(p, l) && aux->pid != pid){
       aux = getDato(p,l);
-      siguiente(p, l); 
-   } 
+      siguiente(p, l);
+   }
    if (aux->pid == pid) return p;
    return NULL;
 }
@@ -110,7 +110,7 @@ void insertarproceso(int pid, char * argv[], lista l) {
    if ((prioridad = getpriority(PRIO_PROCESS, pid)) == -1)
       perror("No se puede obtener la prioridad del proceso");
    else {
-      proc = nuevodato(pid, prioridad, ACT, 0, tiempoactual, comando);
+      proc = nuevodatop(pid, prioridad, ACT, 0, tiempoactual, comando);
       insertar(proc, l);
    }
 
