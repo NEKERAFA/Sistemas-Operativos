@@ -515,6 +515,6 @@ void changeuid(char * argv[]) {
       else { printf ("Imposible obtener informacion de login %s\n",argv[1]); return; }
    if (setuid(u)==-1) {
       sprintf(mensaje, "Error al intentar establecer la credencial %d", u);
-      uidperror(mensaje);
+      perror(mensaje);
    } else printf("Credencial cambiada a %d\n", u);
 }
