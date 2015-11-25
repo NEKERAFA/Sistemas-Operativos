@@ -57,12 +57,15 @@ void jobs(int n,char * trozos[], lista l);
 void clearjobs(lista l);
 
 // Función recursiva
-void recursiva(int n);
+void showrecursive(char * number);
 
 // Imprime el contenido de Memoria
 void memdump(char* dir, char* count);
 
-// Miestra las credenciales
+// Muestra las credenciales
 void changeuid(char * argv[]);
+
+// Muestra las direcciones
+void showdir();
 
 #endif // _FUNCIONES_H_

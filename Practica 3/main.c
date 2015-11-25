@@ -10,8 +10,8 @@
 int const TAM_ENTRADA = 1024;
 
 // Prompt del shell
-void prompt(char * actual_dir) {
-   printf("%s$ ", actual_dir);
+void prompt() {
+   printf("~$ ");
 }
 
 void leerentrada(char * entrada, int tamano_entrada) {
@@ -68,7 +68,9 @@ void procesarentrada(char * entrada, char * dir_act, lista l, int * salir) {
       } else if (!strcmp(c_parametros[0], "uid")) {
          changeuid(c_parametros+1);
       } else if (!strcmp(c_parametros[0], "recursiva")) {
-         recursiva(atoi(c_parametros[1]));
+         showrecursive(c_parametros[1]);
+      } else if (!strcmp(c_parametros[0], "direcciones")) {
+         showdir();
       } else {
          primerplano(c_parametros);
       }
@@ -81,6 +83,7 @@ int main(int argc, char const *argv[]) {
    char entrada[TAM_ENTRADA];
    char dir_act[2048];
    lista procesoshijo = crearlista();
+   lista memoria = crearlista();
 
    if (getcwd(dir_act, 2048) == NULL) {
       perror("Imposible obtener el directorio actual");
@@ -90,11 +93,11 @@ int main(int argc, char const *argv[]) {
    printf("\n");
    printf("Interprete de comando en UNIX\n");
    while(!fin) {
-      prompt(dir_act);
+      prompt();
       leerentrada(entrada, TAM_ENTRADA);
       procesarentrada(entrada, dir_act, procesoshijo, &fin);
    }
 
-   eliminarLista(&eliminardatoproc,&procesoshijo);
+   eliminarLista(&eliminardatop,&procesoshijo);
    return 0;
 }

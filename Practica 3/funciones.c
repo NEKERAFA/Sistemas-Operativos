@@ -12,12 +12,17 @@
 #include <unistd.h>
 #include <pwd.h>
 #include <grp.h>
+#include <errno.h>
 #include <fcntl.h>
 #include "funciones.h"
 #include "lista.h"
 #include "procesos.h"
+#include "utilidades.h"
 
 #define min(a, b) ((a<b) ? (a) : (b))
+
+// Variables globales
+int a; char b; double c;
 
 // Muestra en pantalla el pid actual o el pid padre
 void pid(char * parametro) {
@@ -413,7 +418,7 @@ void jobs_pid(int pid, lista l){
    datoproc * d;
 
    if(!esListaVacia(l)){
-      if((p=buscarDato(pid,l))==NULL){
+      if((p=buscardatop(pid,l))==NULL){
          printf("No se ha encontrado el proceso solicitado\n");
       } else {
          actualizaproceso(p, l);
@@ -459,7 +464,7 @@ void clearjobs(lista l){
          actualizaproceso(p, l);
          d = getDato(p, l);
          if(!strcmp(d->status,SIGN)||!strcmp(d->status,EXIT)){
-            eliminar(&eliminardatoproc,p,l);
+            eliminar(&eliminardatop,p,l);
          }
          p = tmp;
       }
@@ -478,20 +483,70 @@ void recursiva(int n) {
    if (n>0) recursiva(n-1);
 }
 
+// Llama a la función recursiva
+void showrecursive(char * number) {
+   if (number == NULL) printf("recursiva n\n");
+   else recursiva(atoi(number));
+}
+
+void * atop(char * dir) {
+   return (void *) strtoull(dir, NULL, 16);
+}
+
+void imprimeCaracter(char c) {
+   if(c == '\n') printf("%2s ", "\\n");
+   else if(c == '\t') printf("%2s ", "\\t");
+   else if(c == '\r') printf("%2s ", "\\r");
+   else if(isascii(c) && isprint(c)) printf("%2c ", c);
+   else printf("%2s ", "");
+}
+
+void imprimeAscii(char c) {
+    printf("%2x ", (unsigned char) c);
+}
+
 // Imprime el contenido de Memoria
 void memdump(char* dir, char* count) {
    void *p; int i = 0; int j, max;
-   p = atoi(dir);
-   if (count == NULL) max = 25; else max = atoi(count);
+   if(dir == NULL) printf("memdump dir [count]\n");
+   else {
+      p = atop(dir);
+      if (count == NULL) max = 25; else max = atoi(count);
 
-   while (i<max) {
-      for(j = i; j < min(i+25, max); j++) printf("%2c ", *((char *) (p+j)));
-      printf("\n");
-      for(j = i; j < min(i+25, max); j++) printf("%2x ", *((int *) (p+j)));
-      printf("\n");
-      i += 25;
+      while (i<max) {
+         for(j = i; j < min(i+25, max); j++) imprimeCaracter(*((char *) (p+j)));
+         printf("\n");
+         for(j = i; j < min(i+25, max); j++) imprimeAscii(*((char *) (p+j)));
+         printf("\n");
+         i += 25;
+      }
    }
 }
+ /*
+ssize_t LeerFichero(char * f, void *p, size_t cont)
+{
+   struct stat s;
+   ssize_t n;
+   int df;
+
+   if(stat (f,&s)==-1 || ((df=open(f,O_RDONLY))=-1)) return -1;
+   if(cont==-1) cont = s.st_size;
+   if((n = read(df, p, cont)) == -1) return -1;
+   close(df);
+   return n;
+}
+
+void readfile(char * arg[]) {
+   void *p;
+   size_t cont=-1;
+   ssize_t n;
+
+   if (arg[0]==NULL || arg[1]==NULL)  printf("Faltan parametros");
+   p = atop(arg[1]);
+   if ((n=LeerFichero(arg[0], p, cont))==-1) perror("Error al leer el fichero");
+   else printf("Leidos %ibytes en %p", n, &p);
+}
+*/
 
 // Muestra las credenciales
 void MostrarCredenciales() {
@@ -512,9 +567,21 @@ void changeuid(char * argv[]) {
    if (argv[1]==NULL)
       u=atoi(argv[0]); /*no hay primer parametro*/
    else if ((p=getpwnam(argv[1]))!=NULL) u=p->pw_uid;
-      else { printf ("Imposible obtener informacion de login %s\n",argv[1]); return; }
+        else { printf ("Imposible obtener informacion de login %s\n",argv[1]); return; }
    if (setuid(u)==-1) {
       sprintf(mensaje, "Error al intentar establecer la credencial %d", u);
       perror(mensaje);
    } else printf("Credencial cambiada a %d\n", u);
+}
+
+// Imprime direcciones de memoria
+void showdir() {
+   int local_a; char local_b; double local_c;
+
+   printf("Funciones del programa:\n");
+   printf("pid(): %p; getdir(): %p; jobs(): %p\n", &pid, &getdir, &jobs);
+   printf("Variables globales:\n");
+   printf("a: %p; b: %p; c: %p\n", &a, &b, &c);
+   printf("Variables locales:\n");
+   printf("local_a: %p; local_b: %p; local_c: %p\n", &local_a, &local_b, &local_c);
 }
