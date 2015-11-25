@@ -10,7 +10,7 @@
 #include "memoria.h"
 #include "utilidades.h"
 
-posicion buscardatop(dir_t dir, lista l) {
+posicion buscardatomem(dir_t dir, lista l) {
    datomem * aux;
 
    if (esListaVacia(l)) return NULL;

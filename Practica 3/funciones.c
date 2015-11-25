@@ -18,6 +18,7 @@
 #include "lista.h"
 #include "procesos.h"
 #include "utilidades.h"
+#include "malloc.h"
 
 #define min(a, b) ((a<b) ? (a) : (b))
 
@@ -584,4 +585,21 @@ void showdir() {
    printf("a: %p; b: %p; c: %p\n", &a, &b, &c);
    printf("Variables locales:\n");
    printf("local_a: %p; local_b: %p; local_c: %p\n", &local_a, &local_b, &local_c);
+}
+
+void showmallocs(lista lmalloc) {
+   if(!esListaVacia(lmalloc)){
+      datomalloc * d;
+      posicion p = primera(lmalloc);
+      // Creo que esto significa lo mismo
+      while((p != NULL)&&(!esfindelista(p, lmalloc)||(p == ultima (lmalloc)))) {
+         d = getDato(p, lmalloc);
+         mostrarmalloc(d, lmalloc);
+         p = siguiente(p, lmalloc);
+      }
+   } else printf("No hay memoria reservada.");
+}
+
+void mmalloc(char* argv[], lista lmalloc) {
+   showmallocs(lmalloc);
 }

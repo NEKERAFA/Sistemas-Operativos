@@ -68,4 +68,7 @@ void changeuid(char * argv[]);
 // Muestra las direcciones
 void showdir();
 
+// Muestra/Reserva memoria
+void mmalloc();
+
 #endif // _FUNCIONES_H_

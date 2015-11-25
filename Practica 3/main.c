@@ -9,6 +9,13 @@
 
 int const TAM_ENTRADA = 1024;
 
+typedef struct {
+   lista proc;
+   lista mmalloc;
+   lista mmap;
+   lista mshared;
+} listas;
+
 // Prompt del shell
 void prompt() {
    printf("~$ ");
@@ -23,7 +30,7 @@ void leerentrada(char * entrada, int tamano_entrada) {
 }
 
 // Procesa la entrada para ejecutar los comandos
-void procesarentrada(char * entrada, char * dir_act, lista l, int * salir) {
+void procesarentrada(char * entrada, char * dir_act, listas l, int * salir) {
    char * c_parametros[TAM_ENTRADA/4];
    int n_parametros;
    n_parametros = dividircadena(entrada, c_parametros);
@@ -56,13 +63,13 @@ void procesarentrada(char * entrada, char * dir_act, lista l, int * salir) {
       } else if (!strcmp(c_parametros[0], "pplanopri")) {
          primerplanopri(n_parametros-1, c_parametros+1);
       } else if (!strcmp(c_parametros[0], "splano")) {
-         segundoplano(c_parametros+1, l);
+         segundoplano(c_parametros+1, l.proc);
       } else if (!strcmp(c_parametros[0], "splanopri")) {
-         segundoplanopri(n_parametros-1, c_parametros+1,l);
+         segundoplanopri(n_parametros-1, c_parametros+1,  l.proc);
       } else if (!strcmp(c_parametros[0], "jobs")) {
-         jobs(n_parametros-1,c_parametros+1, l);
+         jobs(n_parametros-1,c_parametros+1, l.proc);
       } else if (!strcmp(c_parametros[0], "clearjobs")) {
-         clearjobs(l);
+         clearjobs(l.proc);
       } else if (!strcmp(c_parametros[0], "memdump")) {
          memdump(c_parametros[1], c_parametros[2]);
       } else if (!strcmp(c_parametros[0], "uid")) {
@@ -71,6 +78,8 @@ void procesarentrada(char * entrada, char * dir_act, lista l, int * salir) {
          showrecursive(c_parametros[1]);
       } else if (!strcmp(c_parametros[0], "direcciones")) {
          showdir();
+      } else if (!strcmp(c_parametros[0], "mmalloc")) {
+         mmalloc(l.mmalloc);
       } else {
          primerplano(c_parametros);
       }
@@ -82,8 +91,9 @@ int main(int argc, char const *argv[]) {
    int fin = 0;
    char entrada[TAM_ENTRADA];
    char dir_act[2048];
-   lista procesoshijo = crearlista();
-   lista memoria = crearlista();
+   listas l;
+   l.proc = crearlista();
+   l.mmalloc = crearlista();
 
    if (getcwd(dir_act, 2048) == NULL) {
       perror("Imposible obtener el directorio actual");
@@ -95,9 +105,9 @@ int main(int argc, char const *argv[]) {
    while(!fin) {
       prompt();
       leerentrada(entrada, TAM_ENTRADA);
-      procesarentrada(entrada, dir_act, procesoshijo, &fin);
+      procesarentrada(entrada, dir_act, l, &fin);
    }
 
-   eliminarLista(&eliminardatop,&procesoshijo);
+   eliminarLista(&eliminardatop,&l.proc);
    return 0;
 }

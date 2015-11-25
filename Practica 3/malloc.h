@@ -20,9 +20,6 @@ void eliminardatomalloc( datomalloc *d );
 void insertarmalloc( size_t tamanno, lista l );
 
 // Mostrar malloc
-void mostrarmalloc( dir_t dir, lista l );
+void mostrarmalloc(datomalloc *d, lista l );
 
-// Elimina un malloc
-void eliminarmalloc( datomalloc*, lista l);
-
-#endif // _MEMORIA_H_
+#endif // _MALLOC_H_
