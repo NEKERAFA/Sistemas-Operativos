@@ -79,7 +79,7 @@ void procesarentrada(char * entrada, char * dir_act, listas l, int * salir) {
       } else if (!strcmp(c_parametros[0], "direcciones")) {
          showdir();
       } else if (!strcmp(c_parametros[0], "mmalloc")) {
-         mmalloc(l.mmalloc);
+         mmalloc(c_parametros+1, l.mmalloc);
       } else {
          primerplano(c_parametros);
       }
@@ -108,6 +108,6 @@ int main(int argc, char const *argv[]) {
       procesarentrada(entrada, dir_act, l, &fin);
    }
 
-   eliminarLista(&eliminardatop,&l.proc);
+   eliminarLista(&eliminardatop,&(l.proc));
    return 0;
 }

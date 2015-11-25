@@ -587,19 +587,40 @@ void showdir() {
    printf("local_a: %p; local_b: %p; local_c: %p\n", &local_a, &local_b, &local_c);
 }
 
-void showmallocs(lista lmalloc) {
-   if(!esListaVacia(lmalloc)){
+void showmallocs(lista l){
+   if(!esListaVacia(l)){
       datomalloc * d;
-      posicion p = primera(lmalloc);
-      // Creo que esto significa lo mismo
-      while((p != NULL)&&(!esfindelista(p, lmalloc)||(p == ultima (lmalloc)))) {
-         d = getDato(p, lmalloc);
-         mostrarmalloc(d, lmalloc);
-         p = siguiente(p, lmalloc);
+      posicion p = primera(l);
+      while((p != NULL)&&(!esfindelista(p, l)||(p == ultima (l)))) {
+         d = getDato(p, l);
+         mostrarmalloc(d, l);
+         p = siguiente(p, l);
       }
-   } else printf("No hay memoria reservada.");
+   } else {
+      printf("No hay memoria asignada\n");
+   }
 }
 
-void mmalloc(char* argv[], lista lmalloc) {
-   showmallocs(lmalloc);
+void deassignmalloc(size_t tamanno, lista l) {
+   posicion p = buscardatomalloc(tamanno, l);
+   if(p == NULL) printf("No se ha encontrado ninguna dirección con %li bytes\n", tamanno);
+   else {
+      datomalloc * d = getDato(p, l);
+      printf("desasignado %li de %p\n", tamanno, d->dir);
+      eliminar(&eliminardatomalloc, p, l);
+   }
+}
+
+void mmalloc(char* argv[], lista l) {
+   if((argv[0] == NULL) || ((argv[1] == NULL) && !strcmp(argv[0], "-deassign")))
+      showmallocs(l);
+   else {
+      if((argv[1] == NULL) && strcmp(argv[0], "-deassign")) {
+         size_t tamanno = strtoull(argv[0], NULL, 10);
+         insertarmalloc(tamanno, l);
+      } else if((argv[2] == NULL) && !strcmp(argv[0], "-deassign")) {
+         size_t tamanno = strtoull(argv[1], NULL, 10);
+         deassignmalloc(tamanno, l);
+      } else printf("malloc [-deassign] [tam]\n");
+   }
 }
