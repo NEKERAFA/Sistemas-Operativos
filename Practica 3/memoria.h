@@ -8,31 +8,31 @@
 #define MMAP "mmap"
 #define MSHR "mshr"
 
-typedef (void *) dir_t
+typedef void* dir_t;
 
 // Tipo de dato malloc
 typedef struct dato {
-      dir_t dir;
-      size_t tamanno;
-      time_t hora_ini;
-   } datomalloc;
+   dir_t dir;
+   size_t tamanno;
+   time_t hora_ini;
+} datomalloc;
 
 // Tipo de dato mmap
 typedef struct dato {
-      dir_t dir;
-      size_t tamanno;
-      char * nombre;
-      int dfile;
-      time_t hora_ini;
-   } datommap;
+   dir_t dir;
+   size_t tamanno;
+   char * nombre;
+   int dfile;
+   time_t hora_ini;
+} datommap;
 
 // Tipo de dato mshared
 typedef struct dato {
-      dir_t dir;
-      size_t tamanno;
-      int key;
-      time_t hora_ini;
-   } datomshared;
+   dir_t dir;
+   size_t tamanno;
+   int key;
+   time_t hora_ini;
+} datomshared;
 
 // Estas funciones devuelven un nuevo dato con todos los parámetros inicializados
 datomalloc* nuevodatomalloc(dir_t dir, size_t tamanno, time_t hora_ini);

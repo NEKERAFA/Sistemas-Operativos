@@ -3,14 +3,9 @@
 #include <string.h>
 #include <time.h>
 #include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/resource.h>
-#include <sys/wait.h>
-#include <dirent.h>
+#include <sys/shm.h>
+#include <sys/mman.h>
 #include <unistd.h>
-#include <pwd.h>
-#include <grp.h>
-#include <fcntl.h>
 #include "lista.h"
 #include "memoria.h"
 #include "utilidades.h"
@@ -85,23 +80,22 @@ void eliminardatomalloc(datomalloc *d){
    free(d);
 }
 
-void eliminardatomshared(datomalloc *d){
+void eliminardatommap(datommap *d){
+   munmap(d->dir, d->tamanno);
+   free(d);
+}
+
+void eliminardatomshared(datomshared *d){
    shmdt(d->dir);
    free(d);
 }
 
-posicion buscardatomem(dir_t pid, lista l) {
-   datoproc * aux;
-
+posicion buscardatomem(dir_t dir, lista l) {
    if (esListaVacia(l)) return NULL;
    posicion p = primera(l);
-
-   aux = getDato(p,l);
-
-   while (!esfindelista(p, l) && aux->pid != pid){
-      aux = getDato(p,l);
+   while (!esfindelista(p, l) && getDato(p,l)->dir != dir){
       siguiente(p, l);
    }
-   if (aux->pid == pid) return p;
+   if (getDato(p,l)->dir == dir) return p;
    return NULL;
 }
