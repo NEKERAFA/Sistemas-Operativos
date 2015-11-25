@@ -17,6 +17,7 @@
 #include "funciones.h"
 #include "lista.h"
 #include "procesos.h"
+#include "utilidades.h"
 
 #define min(a, b) ((a<b) ? (a) : (b))
 
@@ -488,26 +489,64 @@ void showrecursive(char * number) {
    else recursiva(atoi(number));
 }
 
+void * atop(char * dir) {
+   return (void *) strtoull(dir, NULL, 16);
+}
+
+void imprimeCaracter(char c) {
+   if(c == '\n') printf("%2s ", "\\n");
+   else if(c == '\t') printf("%2s ", "\\t");
+   else if(c == '\r') printf("%2s ", "\\r");
+   else if(isascii(c) && isprint(c)) printf("%2c ", c);
+   else printf("%2s ", "");
+}
+
+void imprimeAscii(char c) {
+    printf("%2x ", (unsigned char) c);
+}
+
 // Imprime el contenido de Memoria
 void memdump(char* dir, char* count) {
-   char *p; int i = 0; int j, max; long int pos;
+   void *p; int i = 0; int j, max;
    if(dir == NULL) printf("memdump dir [count]\n");
    else {
-      pos = strtol(dir, NULL, 16);
-      p = (char *) pos;
+      p = atop(dir);
       if (count == NULL) max = 25; else max = atoi(count);
 
       while (i<max) {
-         for(j = i; j < min(i+25, max); j++)
-            if ((p[j] >= 32) && (p[j] <= 126)) printf("%2c ", p[j]);
-            else printf("   ");
+         for(j = i; j < min(i+25, max); j++) imprimeCaracter(*((char *) (p+j)));
          printf("\n");
-         for(j = i; j < min(i+25, max); j++) printf("%2x ", (unsigned char) p[j]);
+         for(j = i; j < min(i+25, max); j++) imprimeAscii(*((char *) (p+j)));
          printf("\n");
          i += 25;
       }
    }
 }
+ /*
+ssize_t LeerFichero(char * f, void *p, size_t cont)
+{
+   struct stat s;
+   ssize_t n;
+   int df;
+
+   if(stat (f,&s)==-1 || ((df=open(f,O_RDONLY))=-1)) return -1;
+   if(cont==-1) cont = s.st_size;
+   if((n = read(df, p, cont)) == -1) return -1;
+   close(df);
+   return n;
+}
+
+void readfile(char * arg[]) {
+   void *p;
+   size_t cont=-1;
+   ssize_t n;
+
+   if (arg[0]==NULL || arg[1]==NULL)  printf("Faltan parametros");
+   p = atop(arg[1]);
+   if ((n=LeerFichero(arg[0], p, cont))==-1) perror("Error al leer el fichero");
+   else printf("Leidos %ibytes en %p", n, &p);
+}
+*/
 
 // Muestra las credenciales
 void MostrarCredenciales() {

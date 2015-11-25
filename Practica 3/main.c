@@ -10,8 +10,8 @@
 int const TAM_ENTRADA = 1024;
 
 // Prompt del shell
-void prompt(char * actual_dir) {
-   printf("%s$ ", actual_dir);
+void prompt() {
+   printf("~$ ");
 }
 
 void leerentrada(char * entrada, int tamano_entrada) {
@@ -93,7 +93,7 @@ int main(int argc, char const *argv[]) {
    printf("\n");
    printf("Interprete de comando en UNIX\n");
    while(!fin) {
-      prompt(dir_act);
+      prompt();
       leerentrada(entrada, TAM_ENTRADA);
       procesarentrada(entrada, dir_act, procesoshijo, &fin);
    }

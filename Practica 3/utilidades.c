@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
 
 // Divide la cadena en trozos de un vector
 int dividircadena(char * cadena, char * trozos[]) {
