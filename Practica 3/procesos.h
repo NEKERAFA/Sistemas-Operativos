@@ -8,7 +8,7 @@
 #define SIGN "SIGN"
 #define STOP "STOP"
 
-typedef struct dato {
+typedef struct {
       int pid;
       int prio;
       char * status;

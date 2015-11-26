@@ -108,6 +108,7 @@ int main(int argc, char const *argv[]) {
       procesarentrada(entrada, dir_act, l, &fin);
    }
 
-   eliminarLista(&eliminardatop,&(l.proc));
+   eliminarLista(&eliminardatop, &(l.proc));
+   eliminarLista(&eliminardatomalloc, &(l.mmalloc));
    return 0;
 }

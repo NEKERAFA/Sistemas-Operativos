@@ -72,16 +72,6 @@ void insertarmalloc(size_t tamanno, lista l) {
    }
 }
 
-void imprimirFecha(time_t fecha) {
-   struct tm * tmFecha = (struct tm *) malloc(sizeof(struct tm));
-   localtime_r(&fecha, tmFecha);
-   char * sfecha = (char *) malloc(24*sizeof(char));
-   strftime(sfecha, 24*sizeof(char), "%T", tmFecha);
-   printf("%s", sfecha);
-   free(sfecha);
-   free(tmFecha);
-}
-
 void mostrarmalloc(datomalloc *d, lista l) {
    printf("%p: tamaño: %li. malloc ", d->dir, d->tamanno);
    imprimirFecha(d->hora_ini);

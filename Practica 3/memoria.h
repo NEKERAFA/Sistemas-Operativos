@@ -8,4 +8,6 @@
 
 typedef void* dir_t;
 
+void imprimirFecha( time_t fecha );
+
 #endif // _MEMORIA_H_
