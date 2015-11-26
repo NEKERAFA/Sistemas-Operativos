@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include "funciones.h"
 #include "procesos.h"
+#include "malloc.h"
 #include "utilidades.h"
 #include "lista.h"
 
