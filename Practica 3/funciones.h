@@ -71,4 +71,7 @@ void showdir();
 // Muestra/Reserva memoria
 void mmalloc();
 
+// Muestra las listas de memoria
+void showmem( lista lalloc, lista lmap );
+
 #endif // _FUNCIONES_H_

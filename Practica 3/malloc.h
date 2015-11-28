@@ -24,6 +24,6 @@ posicion buscardatomalloc(size_t tamanno, lista l);
 void insertarmalloc( size_t tamanno, lista l );
 
 // Mostrar malloc
-void mostrarmalloc(datomalloc *d, lista l );
+void mostrarmalloc( datomalloc *d, lista l );
 
 #endif // _MALLOC_H_

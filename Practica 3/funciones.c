@@ -19,6 +19,7 @@
 #include "procesos.h"
 #include "utilidades.h"
 #include "malloc.h"
+#include "mmap.h"
 
 #define min(a, b) ((a<b) ? (a) : (b))
 
@@ -623,4 +624,22 @@ void mmalloc(char* argv[], lista l) {
          deassignmalloc(tamanno, l);
       } else printf("malloc [-deassign] [tam]\n");
    }
+}
+
+void showmmaps(lista l){
+   if(!esListaVacia(l)){
+      datommap * d;
+      posicion p = primera(l);
+      while((p != NULL)&&(!esfindelista(p, l)||(p == ultima (l)))) {
+         d = getDato(p, l);
+         mostrarmmap(d, l);
+         p = siguiente(p, l);
+      }
+   } else {
+      printf("No hay memoria asignada\n");
+   }
+}
+
+void showmem(lista lalloc, lista lmap) {
+   showmallocs(lalloc); showmmaps(lmap);
 }

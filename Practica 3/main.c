@@ -5,6 +5,7 @@
 #include "funciones.h"
 #include "procesos.h"
 #include "malloc.h"
+#include "mmap.h"
 #include "utilidades.h"
 #include "lista.h"
 
@@ -81,6 +82,8 @@ void procesarentrada(char * entrada, char * dir_act, listas l, int * salir) {
          showdir();
       } else if (!strcmp(c_parametros[0], "mmalloc")) {
          mmalloc(c_parametros+1, l.mmalloc);
+      } else if (!strcmp(c_parametros[0], "mem")) {
+         showmem(l.mmalloc, l.mmap);
       } else {
          primerplano(c_parametros);
       }
@@ -95,6 +98,7 @@ int main(int argc, char const *argv[]) {
    listas l;
    l.proc = crearlista();
    l.mmalloc = crearlista();
+   l.mmap = crearlista();
 
    if (getcwd(dir_act, 2048) == NULL) {
       perror("Imposible obtener el directorio actual");
@@ -111,5 +115,6 @@ int main(int argc, char const *argv[]) {
 
    eliminarLista(&eliminardatop, &(l.proc));
    eliminarLista(&eliminardatomalloc, &(l.mmalloc));
+   eliminarLista(&eliminardatommap, &(l.mmap));
    return 0;
 }

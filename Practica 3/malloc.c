@@ -35,17 +35,6 @@ void eliminardatomalloc(datomalloc *d){
 }
 
 posicion buscardatomalloc(size_t tamanno, lista l) {
-   /*datomalloc * aux;
-   if (esListaVacia(l)) return NULL;
-   posicion p = primera(l);
-   aux = getDato(p,l);
-   while (!esfindelista(p, l) && aux->tamanno != tamanno) {
-      aux = getDato(p,l);
-      siguiente(p, l);
-   }
-   if (aux->tamanno == tamanno) return p;
-   return NULL;*/
-
    datomalloc * aux;
 
    if (esListaVacia(l)) return NULL;
