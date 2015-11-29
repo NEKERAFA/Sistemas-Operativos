@@ -3,7 +3,7 @@
 CC = gcc
 CFLAGS = -g -Wall
 OBJ_FUN = funciones.o
-OBJS = lista.o procesos.o utilidades.o memoria.o malloc.o
+OBJS = lista.o procesos.o utilidades.o memoria.o mmap.o malloc.o
 OBJ_SHELL = shell.out
 OBJ_MAIN = main.c funciones.c lista.c procesos.c
 

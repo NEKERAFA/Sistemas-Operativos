@@ -69,7 +69,10 @@ void changeuid(char * argv[]);
 void showdir();
 
 // Muestra/Reserva memoria
-void mmalloc();
+void dommalloc();
+
+// Muestra/Mapea archivos en memoria
+void dommap();
 
 // Muestra las listas de memoria
 void showmem( lista lalloc, lista lmap );

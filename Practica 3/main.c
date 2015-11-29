@@ -81,7 +81,9 @@ void procesarentrada(char * entrada, char * dir_act, listas l, int * salir) {
       } else if (!strcmp(c_parametros[0], "direcciones")) {
          showdir();
       } else if (!strcmp(c_parametros[0], "mmalloc")) {
-         mmalloc(c_parametros+1, l.mmalloc);
+         dommalloc(c_parametros+1, l.mmalloc);
+      } else if (!strcmp(c_parametros[0], "mmap")) {
+         dommap(c_parametros+1, l.mmap);
       } else if (!strcmp(c_parametros[0], "mem")) {
          showmem(l.mmalloc, l.mmap);
       } else {

@@ -71,7 +71,7 @@ void insertarmmap(char * file, char * perm, lista l) {
    if(prot & PROT_WRITE) modo = O_RDWR;
 
    if(stat(file, &s) == -1 || (df = open(file, modo)) == -1)
-      perror("Imposible acceder al fichero.");
+      perror("Imposible acceder al fichero");
    else
       if ((dir = mmap(NULL, s.st_size, prot, map, df, 0)) == MAP_FAILED) {
          perror("Error al mapear fichero"); close(df);

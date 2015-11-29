@@ -57,7 +57,7 @@ void insertarmalloc(size_t tamanno, lista l) {
       time_t tiempoactual = time(NULL);
       datomalloc *mem = nuevodatomalloc(dir, tamanno, tiempoactual);
       insertar(mem, l);
-      printf("asignado %li en %p\n", tamanno, dir);
+      printf("Asignado %li en %p\n", tamanno, dir);
    }
 }
 
