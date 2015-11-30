@@ -34,17 +34,35 @@ void eliminardatomalloc(datomalloc *d){
    free(d);
 }
 
+posicion buscardatomalloc(size_t tamanno, lista l) {
+   datomalloc * aux;
+
+   if (esListaVacia(l)) return NULL;
+   posicion p = primera(l);
+   aux = getDato(p,l);
+   while (!esfindelista(p, l) && aux->tamanno != tamanno){
+      aux = getDato(p,l);
+      siguiente(p, l);
+      printf("%li\n", tamanno);
+   }
+   if (aux->tamanno == tamanno) return p;
+   return NULL;
+}
+
 void insertarmalloc(size_t tamanno, lista l) {
    dir_t dir = (void*) malloc(tamanno);
-   time_t tiempoactual = time(NULL);
-   datomalloc *mem = nuevodatomalloc(dir, tamanno, tiempoactual);
-
-   insertar(mem, l);
+   if (dir == NULL)
+      printf("Error al asignar %li en memoria. No hay espacio suficiente.\n", tamanno);
+   else {
+      time_t tiempoactual = time(NULL);
+      datomalloc *mem = nuevodatomalloc(dir, tamanno, tiempoactual);
+      insertar(mem, l);
+      printf("Asignado %li en %p\n", tamanno, dir);
+   }
 }
 
 void mostrarmalloc(datomalloc *d, lista l) {
-
+   printf("%p: tamaño: %li. malloc ", d->dir, d->tamanno);
+   imprimirFecha(d->hora_ini);
+   printf("\n");
 }
-
-// Elimina un malloc
-void eliminarmalloc( datomalloc*, lista l);

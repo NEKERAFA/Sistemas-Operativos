@@ -1,29 +1,31 @@
-#ifndef _MALLOC_H_
-#define _MALLOC_H_
+#ifndef _MMAP_H_
+#define _MMAP_H_
 #include "memoria.h"
 #include "lista.h"
 
-// Tipo de dato malloc
+// Tipo de dato mmap
 typedef struct {
    dir_t dir;
+   char * nombre;
+   int df;
    size_t tamanno;
    time_t hora_ini;
-} datomalloc;
+} datommap;
 
 // Esta función devuelve un nuevo dato con todos los parámetros inicializados
-datomalloc* nuevodatomalloc( dir_t dir, size_t tamanno, time_t hora_ini );
+datommap * nuevodatommap( dir_t dir, char * nombre, int df, size_t tamanno, time_t hora_ini );
 
 // Esta función elimina un dato.
-void eliminardatomalloc( datomalloc *d );
+void eliminardatommap( datommap *d );
 
 // Esta función devuelve la posición en la que está un dato cuyo campo pid sea el pasado por parámetro
 // Devuelve NULL si no encuentra el dato
-posicion buscardatomalloc(size_t tamanno, lista l);
+posicion buscardatommap( char * nombre, lista l );
 
 // Inserta una posicion de memoria con malloc al final de la lista de malloc
-void insertarmalloc( size_t tamanno, lista l );
+void insertarmmap( char * file, char * perm, lista l );
 
 // Mostrar malloc
-void mostrarmalloc( datomalloc *d, lista l );
+void mostrarmmap( datommap *d, lista l );
 
-#endif // _MALLOC_H_
+#endif // _MMAP_H_

@@ -10,7 +10,7 @@
 
    lista crearlista(){
       nodo *l = crearnodo();
-      
+
       if (l != NULL){
          l->sig = NULL;
          l->ant = l;
@@ -31,8 +31,7 @@
       return (l->ant);
    }
 
-   posicion anterior (posicion p, lista l){
-
+   posicion anterior (posicion p, lista l) {
       if((p == l)||(p->ant == l)){
          return NULL;
       } else {

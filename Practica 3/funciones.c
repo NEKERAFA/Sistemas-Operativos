@@ -18,6 +18,8 @@
 #include "lista.h"
 #include "procesos.h"
 #include "utilidades.h"
+#include "malloc.h"
+#include "mmap.h"
 
 #define min(a, b) ((a<b) ? (a) : (b))
 
@@ -584,4 +586,79 @@ void showdir() {
    printf("a: %p; b: %p; c: %p\n", &a, &b, &c);
    printf("Variables locales:\n");
    printf("local_a: %p; local_b: %p; local_c: %p\n", &local_a, &local_b, &local_c);
+}
+
+void showmallocs(lista l){
+   if(!esListaVacia(l)){
+      datomalloc * d;
+      posicion p = primera(l);
+      while((p != NULL)&&(!esfindelista(p, l)||(p == ultima (l)))) {
+         d = getDato(p, l);
+         mostrarmalloc(d, l);
+         p = siguiente(p, l);
+      }
+   } else {
+      printf("No hay memoria asignada\n");
+   }
+}
+
+void deassignmalloc(size_t tamanno, lista l) {
+   posicion p = buscardatomalloc(tamanno, l);
+   if(p == NULL) printf("No se ha encontrado ninguna dirección con %li bytes\n", tamanno);
+   else {
+      datomalloc * d = getDato(p, l);
+      printf("Desasignado %li de %p\n", tamanno, d->dir);
+      eliminar(&eliminardatomalloc, p, l);
+   }
+}
+
+void dommalloc(char* argv[], lista l) {
+   if((argv[0] == NULL) || ((argv[1] == NULL) && !strcmp(argv[0], "-deassign")))
+      showmallocs(l);
+   else {
+      if((argv[1] == NULL) && strcmp(argv[0], "-deassign")) {
+         size_t tamanno = strtoull(argv[0], NULL, 10);
+         insertarmalloc(tamanno, l);
+      } else if((argv[2] == NULL) && !strcmp(argv[0], "-deassign")) {
+         size_t tamanno = strtoull(argv[1], NULL, 10);
+         deassignmalloc(tamanno, l);
+      } else printf("malloc [-deassign] [tam]\n");
+   }
+}
+
+void showmmaps(lista l){
+   if(!esListaVacia(l)){
+      datommap * d;
+      posicion p = primera(l);
+      while((p != NULL)&&(!esfindelista(p, l)||(p == ultima (l)))) {
+         d = getDato(p, l);
+         mostrarmmap(d, l);
+         p = siguiente(p, l);
+      }
+   } else {
+      printf("No hay ficheros mapeados\n");
+   }
+}
+
+void deassignmmap(char * nombre, lista l) {
+   posicion p = buscardatommap(nombre, l);
+   if(p == NULL) printf("No se ha encontrado el archivo mapeado como %s\n", nombre);
+   else {
+      datommap * d = getDato(p, l);
+      printf("Desasignado %s de %p\n", nombre, d->dir);
+      eliminar(&eliminardatommap, p, l);
+   }
+}
+
+void dommap(char* argv[], lista l) {
+   if((argv[0] == NULL) || ((argv[1] == NULL) && !strcmp(argv[0], "-deassign")))
+      showmmaps(l);
+   else {
+      if(!strcmp(argv[0], "-deassign")) deassignmmap(argv[1], l);
+      else insertarmmap(argv[0], argv[1], l);
+   }
+}
+
+void showmem(lista lalloc, lista lmap) {
+   showmallocs(lalloc); showmmaps(lmap);
 }

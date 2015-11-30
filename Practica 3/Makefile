@@ -3,18 +3,18 @@
 CC = gcc
 CFLAGS = -g -Wall
 OBJ_FUN = funciones.o
-OBJS = lista.o procesos.o utilidades.o
+OBJS = lista.o procesos.o utilidades.o memoria.o mmap.o malloc.o
 OBJ_SHELL = shell.out
 OBJ_MAIN = main.c funciones.c lista.c procesos.c
 
 all: shell.out
 
 
-shell.out: utilidades.o procesos.o lista.o funciones.o memoria.o main.c
+shell.out: utilidades.o procesos.o lista.o memoria.o malloc.o mmap.o funciones.o main.c
 	echo 'Compilando terminal...'
 	$(CC) $(CFLAGS) main.c $(OBJ_FUN) $(OBJS) -o $(OBJ_SHELL)
 
-funciones.o: funciones.c funciones.h  lista.o
+funciones.o: funciones.c funciones.h lista.o
 	echo 'Compilando funciones...'
 	$(CC) $(CFLAGS) -c funciones.c
 
@@ -33,6 +33,14 @@ procesos.o: procesos.c procesos.h
 memoria.o: memoria.c memoria.h
 	echo 'Compilando modulo memoria'
 	$(CC) $(CFLAGS) -c memoria.c
+
+malloc.o: malloc.c malloc.h
+	echo 'Compilando modulo malloc'
+	$(CC) $(CFLAGS) -c malloc.c
+
+mmap.o: mmap.c mmap.h
+	echo 'Compilando modulo mmap'
+	$(CC) $(CFLAGS) -c mmap.c
 
 clean:
 	echo 'Limpiando...'
