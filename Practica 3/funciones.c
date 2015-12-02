@@ -654,6 +654,7 @@ void dommap(char* argv[], lista l) {
    if((argv[0] == NULL) || ((argv[1] == NULL) && !strcmp(argv[0], "-deassign")))
       showmmaps(l);
    else {
+      printf("%s %s\n",argv[0],argv[1]);
       if(!strcmp(argv[0], "-deassign")) deassignmmap(argv[1], l);
       else insertarmmap(argv[0], argv[1], l);
    }
