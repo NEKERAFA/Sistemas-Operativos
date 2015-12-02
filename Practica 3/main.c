@@ -80,6 +80,8 @@ void procesarentrada(char * entrada, char * dir_act, listas l, int * salir) {
          showrecursive(c_parametros[1]);
       } else if (!strcmp(c_parametros[0], "direcciones")) {
          showdir();
+      } else if (!strcmp(c_parametros[0], "readfile")) {
+         readfile(c_parametros+1);
       } else if (!strcmp(c_parametros[0], "mmalloc")) {
          dommalloc(c_parametros+1, l.mmalloc);
       } else if (!strcmp(c_parametros[0], "mmap")) {

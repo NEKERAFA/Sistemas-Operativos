@@ -25,7 +25,7 @@ static datommap* creardatommap() {
 datommap* nuevodatommap(dir_t dir, char * nombre, int df, size_t tamanno, time_t hora_ini) {
    datommap * d = creardatommap();
    d->dir = dir;
-   d->nombre = nombre;
+   d->nombre = strdup(nombre);
    d->df = df;
    d->tamanno = tamanno;
    d->hora_ini = hora_ini;
@@ -34,7 +34,8 @@ datommap* nuevodatommap(dir_t dir, char * nombre, int df, size_t tamanno, time_t
 
 void eliminardatommap(datommap *d) {
    close(d->df);
-   free(d->dir);
+   munmap(d->dir, d->tamanno);
+   free(d->nombre);
    free(d);
 }
 
