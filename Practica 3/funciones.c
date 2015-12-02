@@ -550,6 +550,53 @@ void readfile(char * arg[]) {
 }
 */
 
+ssize_t leerFichero(char * f, void * p, size_t cont) {
+   struct stat s; ssize_t n; int df;
+
+   if(stat(f, &s) == -1 || ((df = open(f, O_RDONLY)) == -1)) return -1;
+   if(cont == -1) cont = s.st_size;
+   if((n = read(df, p, cont)) == -1) { close(df); return -1; }
+   close(df);
+   return n;
+}
+
+// Lee un fichero en una dirección
+void readfile(char * argv[]) {
+   void *p; ssize_t tam; size_t cont = -1;
+
+   if(argv[0] == NULL || argv[1] == NULL) printf("readfile: faltan parametros\n");
+   else {
+      p = atop(argv[1]); if(argv[2] != NULL) cont = atoi(argv[2]);
+      if((tam = leerFichero(argv[0], p, cont)) == -1)
+         perror("Error al leer el fichero");
+      else printf("Leidos %li bytes en %p\n", tam, p);
+   }
+}
+
+ssize_t escribirFichero(char * f, void * p, size_t cont, int modo) {
+   ssize_t n; int df;
+
+   if((df = open(f, modo)) == -1) return -1;
+   if((n = write(df, p, cont)) == -1) { close(df); return -1; }
+   close(df);
+   return n;
+}
+
+// Escribe a un fichero desde una dirección
+void writefile(char * argv[]) {
+   void *p; ssize_t tam; size_t cont; int modo = O_WRONLY | O_CREAT;
+
+   if(argv[0] == NULL || argv[1] == NULL || argv[2] == NULL)
+      printf("writefile: faltan parametros\n");
+   else {
+      p = atop(argv[1]); cont = atoi(argv[2]);
+      if(argv[3] != NULL && !strcmp(argv[3], "-o")) modo |= O_TRUNC;
+      if((tam = escribirFichero(argv[0], p, cont, modo)) == -1)
+         perror("Error al escribir el fichero");
+      else printf("Escritos %li bytes en %s\n", tam, argv[0]);
+   }
+}
+
 // Muestra las credenciales
 void MostrarCredenciales() {
    uid_t u = getuid();

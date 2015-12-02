@@ -65,6 +65,9 @@ void memdump(char* dir, char* count);
 // Muestra las credenciales
 void changeuid(char * argv[]);
 
+// Lee un fichero en un puntero
+void readfile(char * argv[]);
+
 // Muestra las direcciones
 void showdir();
 
