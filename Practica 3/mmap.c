@@ -48,9 +48,7 @@ posicion buscardatommap(char * nombre, lista l) {
    while (!esfindelista(p, l) && strcmp(aux->nombre, nombre)){
       aux = getDato(p,l);
       siguiente(p, l);
-      printf("%s\n", nombre);
    }
-   printf("%s %s\n",aux->nombre, nombre);
    if (!strcmp(aux->nombre, nombre)) return p;
    return NULL;
 }
@@ -66,7 +64,6 @@ int proteccionfichero(char * perm) {
 }
 
 void insertarmmap(char * file, char * perm, lista l) {
-   //Crear un puntero a char y copiar el contenido de file en esa nueva variable
    int prot = 0, map = MAP_PRIVATE, modo = O_RDONLY, df;
    dir_t dir; struct stat s;
 

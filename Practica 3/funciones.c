@@ -20,6 +20,7 @@
 #include "utilidades.h"
 #include "malloc.h"
 #include "mmap.h"
+#include "mshared.h"
 
 #define min(a, b) ((a<b) ? (a) : (b))
 
@@ -701,12 +702,49 @@ void dommap(char* argv[], lista l) {
    if((argv[0] == NULL) || ((argv[1] == NULL) && !strcmp(argv[0], "-deassign")))
       showmmaps(l);
    else {
-      printf("%s %s\n",argv[0],argv[1]);
       if(!strcmp(argv[0], "-deassign")) deassignmmap(argv[1], l);
       else insertarmmap(argv[0], argv[1], l);
    }
 }
 
-void showmem(lista lalloc, lista lmap) {
-   showmallocs(lalloc); showmmaps(lmap);
+void showmshared(lista l){
+   if(!esListaVacia(l)){
+      datomshared * d;
+      posicion p = primera(l);
+      while((p != NULL)&&(!esfindelista(p, l)||(p == ultima (l)))) {
+         d = getDato(p, l);
+         mostrarmshared(d, l);
+         p = siguiente(p, l);
+      }
+   } else {
+      printf("No hay memoria compartida mapeada\n");
+   }
+}
+
+void deassignmshared(size_t tamanno, lista l) {
+   posicion p = buscardatomshared(tamanno, l);
+   if(p == NULL) printf("No se ha encontrado la memoria compartida de tamaño %d\n", tamanno);
+   else {
+      datomshared * d = getDato(p, l);
+      printf("Desasignada zona de memoria de tamaño %d en %p\n", tamanno, d->dir);
+      eliminar(&eliminardatomshared, p, l);
+   }
+}
+
+void domshared(char*argv[],lista l){
+   dir_t p;;
+   if((argv[0] == NULL) || ((argv[1] == NULL) && !strcmp(argv[0], "-deassign")))
+      showmshared(l);
+   else {
+      if(!strcmp(argv[0], "-deassign")) deassignmshared(atoi(argv[1]), l);
+      else 
+         if ((argv[1]!= NULL) && (p = (dir_t) (ObtenerMemoriaShmget(atoi(argv[0]),atoi(argv[1]),l))!=NULL)){
+            printf("Memoria compartida de clave %d mapeada en %p\n", atoi(argv[1]), p);
+         } else
+            ObtenerMemoriaShmget(atoi(argv[0]),NULL,l);
+   }   
+}
+
+void showmem(lista lalloc, lista lmap,lista lmshared) {
+   showmallocs(lalloc); showmmaps(lmap); showmshared(lmshared);
 }

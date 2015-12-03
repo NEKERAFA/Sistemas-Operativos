@@ -77,7 +77,13 @@ void dommalloc();
 // Muestra/Mapea archivos en memoria
 void dommap();
 
+void showmshared(lista l);
+
+void deassignmshared(size_t tamanno, lista l);
+
+void domshared(char*argv[],lista l);
+
 // Muestra las listas de memoria
-void showmem( lista lalloc, lista lmap );
+void showmem( lista lalloc, lista lmap , lista mshared );
 
 #endif // _FUNCIONES_H_

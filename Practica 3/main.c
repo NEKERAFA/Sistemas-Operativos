@@ -86,8 +86,10 @@ void procesarentrada(char * entrada, char * dir_act, listas l, int * salir) {
          dommalloc(c_parametros+1, l.mmalloc);
       } else if (!strcmp(c_parametros[0], "mmap")) {
          dommap(c_parametros+1, l.mmap);
+      } else if (!strcmp(c_parametros[0], "mshared")) {
+         domshared(c_parametros+1, l.mshared);
       } else if (!strcmp(c_parametros[0], "mem")) {
-         showmem(l.mmalloc, l.mmap);
+         showmem(l.mmalloc, l.mmap, l.mshared);
       } else {
          primerplano(c_parametros);
       }
@@ -103,6 +105,7 @@ int main(int argc, char const *argv[]) {
    l.proc = crearlista();
    l.mmalloc = crearlista();
    l.mmap = crearlista();
+   l.mshared = crearlista();
 
    if (getcwd(dir_act, 2048) == NULL) {
       perror("Imposible obtener el directorio actual");
