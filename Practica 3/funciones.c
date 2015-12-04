@@ -4,6 +4,8 @@
 #include <ctype.h>
 #include <limits.h>
 #include <time.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -741,8 +743,95 @@ void domshared(char*argv[],lista l){
          if ((argv[1]!= NULL) && (p = (dir_t) (ObtenerMemoriaShmget(atoi(argv[0]),atoi(argv[1]),l))!=NULL)){
             printf("Memoria compartida de clave %d mapeada en %p\n", atoi(argv[1]), p);
          } else
-            ObtenerMemoriaShmget(atoi(argv[0]),NULL,l);
+         
+         if ((p=ObtenerMemoriaShmget(atoi(argv[0]),NULL,l))==NULL){
+            printf("No se ha podido encontrar la memoria compartida de clave %s\n",argv[0]);
+         } else {
+            printf("Memoria compartida de clave %s mapeada en %p\n", argv[0], p);
+         }
    }   
+}
+
+void dodeassign(char * argv[] ,lista lalloc, lista lmap,lista lmshared){
+   datomalloc  * auxloc;
+   datommap    * auxmap;
+   datomshared * auxshd;
+   dir_t dir ;
+
+   if (argv[0]!=NULL){
+      dir = atop(argv[0]);
+      if (!esListaVacia(lalloc)) {
+         posicion p = primera(lalloc);
+         auxloc = getDato(p,lalloc);
+         while (!esfindelista(p, lalloc) && (auxloc->dir!=dir)){
+            auxloc = getDato(p,lalloc);
+            siguiente(p, lalloc);
+         }
+         if (auxloc->dir == dir) {
+            eliminar(&eliminardatomalloc,p,lalloc);
+            printf("Eliminada memoria de direccion %p asignada com mmalloc\n",dir);
+            return;
+         }
+      }
+
+      if (!esListaVacia(lmap)) {
+         posicion p = primera(lmap);
+         auxmap = getDato(p,lmap);
+         while (!esfindelista(p, lmap) && (auxmap->dir!=dir)){
+            auxmap = getDato(p,lmap);
+            siguiente(p, lmap);
+         }
+         if (auxmap->dir == dir) {
+            eliminar(&eliminardatommap,p,lmap);
+            printf("Eliminada memoria de direccion %p asignada com mmap\n",dir);
+            return;
+         }
+      }
+
+      if (!esListaVacia(lmshared)) {
+         posicion p = primera(lmshared);
+         auxshd = getDato(p,lmshared);
+         while (!esfindelista(p, lmshared) && (auxshd->dir!=dir)){
+            auxshd = getDato(p,lmshared);
+            siguiente(p, lmshared);
+         }
+         if (auxshd->dir == dir) {
+            eliminar(&eliminardatomshared,p,lmshared);
+            printf("Eliminada memoria de direccion %p asignada com mshared\n",dir);
+            return;
+         }
+      }
+      printf("No se ha encontrado la direccion de memoria %p\n",dir);
+   } else {
+      printf("Error : deassign precisa de un argumento \n");
+   }
+}
+
+void dormkey (char * argv[]){   
+   key_t clave;
+   int id;
+   char * key; 
+   if (argv[0]==NULL){
+      printf("Error: rmkey recibe un parametro \n");
+      return;
+   }
+   
+   key = argv[0];
+   
+   if (key==NULL || (clave=(key_t) strtoul(key,NULL,10))==IPC_PRIVATE){
+      printf ("rmkey clave_valida\n");
+      return;
+   }
+   if ((id=shmget(clave,0,0666))==-1){
+      perror ("shmget: imposible obtener memoria compartida");
+      return;
+   }
+   if (shmctl(id,IPC_RMID,NULL)==-1)
+      perror ("shmctl: imposible eliminar memoria compartida\n");
+   else 
+      printf("Eliminada clave de memoria compartida %s \n",key);
+
+
 }
 
 void showmem(lista lalloc, lista lmap,lista lmshared) {

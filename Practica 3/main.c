@@ -6,6 +6,7 @@
 #include "procesos.h"
 #include "malloc.h"
 #include "mmap.h"
+#include "mshared.h"
 #include "utilidades.h"
 #include "lista.h"
 
@@ -90,6 +91,10 @@ void procesarentrada(char * entrada, char * dir_act, listas l, int * salir) {
          domshared(c_parametros+1, l.mshared);
       } else if (!strcmp(c_parametros[0], "mem")) {
          showmem(l.mmalloc, l.mmap, l.mshared);
+      } else if (!strcmp(c_parametros[0], "deassign")) {
+         dodeassign(c_parametros+1,l.mmalloc, l.mmap, l.mshared);
+      } else if (!strcmp(c_parametros[0], "rmkey")) {
+         dormkey(c_parametros+1);
       } else {
          primerplano(c_parametros);
       }
@@ -123,5 +128,6 @@ int main(int argc, char const *argv[]) {
    eliminarLista(&eliminardatop, &(l.proc));
    eliminarLista(&eliminardatomalloc, &(l.mmalloc));
    eliminarLista(&eliminardatommap, &(l.mmap));
+   eliminarLista(&eliminardatomshared, &(l.mshared));
    return 0;
 }

@@ -77,11 +77,11 @@ void dommalloc();
 // Muestra/Mapea archivos en memoria
 void dommap();
 
-void showmshared(lista l);
-
-void deassignmshared(size_t tamanno, lista l);
-
+//Muestra/Mapea zonas de memoria compartida
 void domshared(char*argv[],lista l);
+
+//Elimina una clave de memoria compartida
+void dormkey (char * argv[]);
 
 // Muestra las listas de memoria
 void showmem( lista lalloc, lista lmap , lista mshared );
